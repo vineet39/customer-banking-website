@@ -27,12 +27,20 @@ namespace BankingApplication.Controllers
         } 
         
         [HttpPost]
-        public async Task<IActionResult> SaveChanges(int customerid,string name,string TFN,string address,string city,string postcode,string state,string phone){
+        public async Task<IActionResult> SaveChanges(int customerid,string customerName,string TFN,string address,string city,string postcode,string state,string phone){
 
             var customer = await _context.Customer.FindAsync(customerid);
-            customer.CustomerName = name;
+            
+            customer.CustomerName = customerName;
+            customer.TFN = TFN;
+            customer.Address = address;
+            customer.City = city;
+            customer.State = state;
+            customer.PostCode = postcode;
+            customer.Phone = phone;
+            
             await _context.SaveChangesAsync();
-            Console.WriteLine("Changesss");
+    
             return RedirectToAction(nameof(EditProfile));
             
         }
