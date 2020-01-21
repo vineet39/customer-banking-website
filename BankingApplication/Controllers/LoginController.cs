@@ -45,6 +45,16 @@ namespace BankingApplication.Controllers
             //Redirect to customer page
             return RedirectToAction("Index", "Bank");
         }
+
+        public IActionResult Logout()
+        {
+            //Clear Session variables
+            HttpContext.Session.Clear();
+
+            //Return to home page
+            return RedirectToAction("Index", "Home");
+
+        }
     }
     
 }
