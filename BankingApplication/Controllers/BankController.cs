@@ -10,18 +10,18 @@ namespace BankingApplication.Controllers
         public BankController(BankAppContext context) => _context = context;
         public ViewResult Index() {
             
-            var customer = new Customer(){
-                CustomerID = 2100,
-                CustomerName = "Shekar",
-                Address = "73 Vasey Ave",
-                City = "Melbourne",
-                TFN = "123456",
-                PostCode = "3075",
-                Phone = "61414092713",
-                State = "Victoria"
-            };
+            //var customer = new Customer(){
+            //    CustomerID = 2100,
+            //    CustomerName = "Shekar",
+            //    Address = "73 Vasey Ave",
+            //    City = "Melbourne",
+            //    TFN = "123456",
+            //    PostCode = "3075",
+            //    Phone = "61414092713",
+            //    State = "Victoria"
+            //};
 
-            return View(customer);
+            return View();
         } 
     }
 }

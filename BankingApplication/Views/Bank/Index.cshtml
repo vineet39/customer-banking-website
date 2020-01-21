@@ -1,5 +1,7 @@
+@using Microsoft.AspNetCore.Http
 <div>
     <label>
         Bank-Index
+        Welcome @Context.Session.GetString(nameof(Customer.CustomerName))
     </label>
 </div>

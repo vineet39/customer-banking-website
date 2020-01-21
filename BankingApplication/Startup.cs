@@ -27,6 +27,11 @@ namespace BankingApplication
         {
             services.AddDbContext<BankAppContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("BankAppContext")));
+            services.AddSession(options =>
+            {
+                // Make the session cookie essential.
+                options.Cookie.IsEssential = true;
+            });
             services.AddControllersWithViews();
         }
 
@@ -45,7 +50,7 @@ namespace BankingApplication
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthorization();
