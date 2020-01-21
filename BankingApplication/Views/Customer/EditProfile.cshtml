@@ -1,0 +1,71 @@
+@model Customer
+@{
+    ViewData["Title"] = "EditProfile";
+    ViewData["Customerid"] = @Model.CustomerID;
+}
+
+@* <h1 class="display-4">Account Number @Model.AccountNumber (@Model.AccountType)</h1> *@
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <form asp-action="SaveChanges" method="Post" asp-route-customerid="@Model.CustomerID">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label for="Name" class="control-label">Name:</label>
+                <input id="Name" name="Name" class="form-control" value=@Model.CustomerName
+                    data-val="true" data-val-string="The field Name must be a string."
+                    data-val-required="The Name field is required." />
+                @Html.ValidationMessage("Name", new { @class = "text-danger" })
+                <br>
+                <label for="TFN" class="control-label">TFN:</label>
+                <input id="TFN" name="TFN" class="form-control" value=@Model.TFN
+                    data-val="true" data-val-string="The field TFN must be a string."
+                    data-val-required="The TFN field is required." />
+                @Html.ValidationMessage("TFN", new { @class = "text-danger" })
+                <br>
+                <label for="Address" class="control-label">Address:</label>
+                <input id="Address" name="Address" class="form-control" value=@Model.Address
+                    data-val="true" data-val-string="The field Address must be a string."
+                    data-val-required="The Address field is required." />
+                @Html.ValidationMessage("Address", new { @class = "text-danger" })
+                <br>
+                <label for="City" class="control-label">City:</label>           
+                <input id="City" name="City" class="form-control" value=@Model.City
+                    data-val="true" data-val-string="The field City must be a string." data-val-maxlength = "Maximum length is 40 characters"
+                    data-val-maxlength-max="40"
+                    data-val-required="The City field is required." />
+                @Html.ValidationMessage("City", new { @class = "text-danger" })
+                <br>
+                <label for="State" class="control-label">State:</label>
+                <input id="State" name="State" class="form-control" value=@Model.State
+                    data-val="true" data-val-string="The field State must be a string."
+                    data-val-required="The State field is required." />
+                @Html.ValidationMessage("State", new { @class = "text-danger" })
+                <br>
+                <label for="PostCode" class="control-label">PostCode:</label>
+                <input id="PostCode" name="PostCode" class="form-control" value=@Model.PostCode
+                    data-val="true" data-val-string="The field PostCode must be a string."
+                    data-val-required="The PostCode field is required." />
+                @Html.ValidationMessage("PostCode", new { @class = "text-danger" })
+                <br>
+                <label for="Phone" class="control-label">Phone:</label>
+                <input id="Phone" name="Phone" class="form-control" value=@Model.Phone
+                    data-val="true" data-val-string="The field Phone must be a string."
+                    data-val-required="The Phone field is required." />
+                @Html.ValidationMessage("Phone", new { @class = "text-danger" })
+            </div>
+            <div class="form-group-inline text-center">
+                <button type="button" class="btn btn-secondary" id="button" style="margin-right:20px" onclick="location.href='@Url.Action("Index", "Home")'" />Cancel</button>
+                <input type="submit" value="Save" class="btn btn-primary" id="button" >
+            </div>
+        </form>
+    </div>
+</div>
+
+@* <div>
+    <a asp-action="Index">Back to Accounts</a>
+</div> *@
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

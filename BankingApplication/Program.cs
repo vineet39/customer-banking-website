@@ -26,7 +26,8 @@ namespace BankingApplication
                     SeedData.Initialize(services);
                 }
                 catch (Exception ex)
-                {
+                {   
+                    Console.WriteLine(ex.Message);
                     var logger = services.GetRequiredService<ILogger<Program>>();
                     logger.LogError(ex, "An error occurred seeding the DB.");
                 }
