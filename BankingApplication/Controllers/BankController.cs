@@ -2,8 +2,8 @@ using BankingApplication.Data;
 using BankingApplication.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace BankingApplication.Controllers
 {
@@ -11,10 +11,11 @@ namespace BankingApplication.Controllers
     {
         private readonly BankAppContext _context;
         public BankController(BankAppContext context) => _context = context;
+        private int CustomerID => HttpContext.Session.GetInt32(nameof(Customer.CustomerID)).Value;
         public async Task<IActionResult> Index() {
             
            var customer =  await _context.Customer.Include(x => x.Accounts).
-                FirstOrDefaultAsync(x => x.CustomerID == 2100);
+                FirstOrDefaultAsync(x => x.CustomerID == CustomerID);
 
             return View(customer);
         } 

@@ -2,7 +2,8 @@ using System.Threading.Tasks;
 using BankingApplication.Data;
 using BankingApplication.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankingApplication.Controllers
 {
@@ -10,18 +11,10 @@ namespace BankingApplication.Controllers
     {
         private readonly BankAppContext _context;
         public CustomerController(BankAppContext context) => _context = context;
-        public ViewResult EditProfile(int customerid) {
+        private int CustomerID => HttpContext.Session.GetInt32(nameof(Customer.CustomerID)).Value;
+        public async Task<IActionResult> EditProfile(int customerid) {
             
-            var customer = new Customer(){
-                CustomerID = 2100,
-                CustomerName = "Shekar",
-                Address = "73 Vasey Ave",
-                City = "Melbourne",
-                TFN = "123456",
-                PostCode = "3075",
-                Phone = "61414092713",
-                State = "Victoria"
-            };
+           var customer =  await _context.Customer.FirstOrDefaultAsync(x => x.CustomerID == CustomerID);
 
             return View(customer);
         } 
