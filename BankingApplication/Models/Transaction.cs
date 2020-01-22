@@ -9,6 +9,13 @@ namespace BankingApplication.Models
 {
     public class Transaction
     {
+        public const char WithdrawTransaction= 'W';
+        public const char DepositTransaction = 'D';
+        public const char TransferTransaction = 'T';
+        public const char BillPayTransaction= 'B';
+
+        public const char ServiceChargeTransaction = 'S';
+
         [StringLength(4)]
         public int TransactionID { get; set; }
 

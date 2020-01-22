@@ -9,6 +9,9 @@ namespace BankingApplication.Models
 {
     public class Account
     {
+        public const decimal withdrawServiceCharge = 0.1M;
+        public const decimal transferServiceCharge = 0.2M;
+
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         [StringLength(4)]
         public int AccountNumber { get; set; }
@@ -29,8 +32,48 @@ namespace BankingApplication.Models
         [Required]
         [StringLength(8)]
         public DateTime ModifyDate { get; set; }
-
-
         public List<Transaction> Transactions { get; set; } 
+
+         public void GenerateTransaction(char type, decimal amount, int destinationAccountNumber = 0, string comment = null)
+         {
+            Transaction transaction = new Transaction(){
+            AccountNumber = this.AccountNumber,
+            TransactionType = type,
+            Amount = amount,
+            ModifyDate = DateTime.UtcNow,
+            Comment = comment
+            };
+
+            if(destinationAccountNumber == 0)
+            {
+                transaction.DestinationAccountNumber = null;
+            }
+            else
+            {
+                transaction.DestinationAccountNumber = destinationAccountNumber;
+            }
+        }
+
+        public void Withdraw(decimal amount)
+        {
+            Balance = Balance - amount;
+            
+            var filteredList =  Transactions.Where(t => t.TransactionType != Transaction.ServiceChargeTransaction);
+            
+            if(filteredList.Count() >= 5)
+            {
+                Balance -= withdrawServiceCharge;
+                GenerateTransaction(Transaction.TransferTransaction,transferServiceCharge);
+            }
+            
+            GenerateTransaction(Transaction.WithdrawTransaction,amount);
+        }
+
+        public void Deposit(decimal amount)
+        {
+            Balance = Balance + amount;
+            
+            GenerateTransaction(Transaction.DepositTransaction,amount);
+        }
     }
 }
