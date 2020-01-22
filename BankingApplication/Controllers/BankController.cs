@@ -12,6 +12,8 @@ namespace BankingApplication.Controllers
         private readonly BankAppContext _context;
         public BankController(BankAppContext context) => _context = context;
         private int CustomerID => HttpContext.Session.GetInt32(nameof(Customer.CustomerID)).Value;
+
+        public ViewResult Index() {
         public async Task<IActionResult> Index() {
             
            var customer =  await _context.Customer.Include(x => x.Accounts).
