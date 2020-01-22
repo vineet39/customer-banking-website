@@ -29,7 +29,7 @@ namespace BankingApplication.Controllers
         public IActionResult Login(string userID, string password)
         {
             //LINQ query for eager loading login
-            var login = context.Login.Where(a => a.UserID == userID).Include(a => a.Customer).Single();
+            var login = context.Login.Include(a => a.Customer).FirstOrDefault(a => a.UserID == userID);
             if (login == null || !PBKDF2.Verify(login.Password, password))
             {
                 ModelState.AddModelError("LoginFailed", "Login failed, please try again.");
