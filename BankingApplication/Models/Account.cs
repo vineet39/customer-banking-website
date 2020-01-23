@@ -9,8 +9,8 @@ namespace BankingApplication.Models
 {
     public class Account
     {
-        public const decimal withdrawServiceCharge = 0.1M;
-        public const decimal transferServiceCharge = 0.2M;
+        public const decimal WithdrawServiceCharge = 0.1M;
+        public const decimal TransferServiceCharge = 0.2M;
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         [StringLength(4)]
@@ -52,6 +52,8 @@ namespace BankingApplication.Models
             {
                 transaction.DestinationAccountNumber = destinationAccountNumber;
             }
+
+            this.Transactions.Add(transaction);
         }
 
         public void Withdraw(decimal amount)
@@ -62,8 +64,8 @@ namespace BankingApplication.Models
             
             if(filteredList.Count() >= 5)
             {
-                Balance -= withdrawServiceCharge;
-                GenerateTransaction(Transaction.TransferTransaction,transferServiceCharge);
+                Balance -= WithdrawServiceCharge;
+                GenerateTransaction(Transaction.ServiceChargeTransaction,WithdrawServiceCharge);
             }
             
             GenerateTransaction(Transaction.WithdrawTransaction,amount);
@@ -74,6 +76,24 @@ namespace BankingApplication.Models
             Balance = Balance + amount;
             
             GenerateTransaction(Transaction.DepositTransaction,amount);
+        }
+
+        public void Transfer(decimal amount,Account receiverAccount,string comment = null)
+        {
+            Balance = Balance - amount;
+            
+            var filteredList =  Transactions.Where(t => t.TransactionType != Transaction.ServiceChargeTransaction);
+            
+            if(filteredList.Count() >= 5)
+            {
+                Balance -= TransferServiceCharge;
+                GenerateTransaction(Transaction.ServiceChargeTransaction,TransferServiceCharge);
+            }
+            
+            GenerateTransaction(Transaction.TransferTransaction,amount,receiverAccount.AccountNumber,comment);
+
+            receiverAccount.Balance = receiverAccount.Balance + amount;
+            GenerateTransaction(Transaction.TransferTransaction,amount,0,comment);
         }
     }
 }

@@ -5,7 +5,7 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
 function myFunction() {
-  var x = document.getElementById('destinationAccountInputTransfer');
+  var x = document.getElementById('destinationAccountNumber');
   var transferRadioBox = document.getElementById("transferRadioBox");
   var depositRadioBox = document.getElementById("depositRadioBox");
   var accountLabel = document.getElementById("accountLabel");
@@ -32,6 +32,7 @@ function myFunction() {
 }
 </script>
 <form asp-action="PerformTransaction" method="Post">
+   <div asp-validation-summary="All" class="text-danger"></div>
    <div class="form-group row ">
       <label class="col-2">Transaction Details:</label>
    </div>
@@ -39,7 +40,7 @@ function myFunction() {
       <label class="col-2">Transaction Type:</label>
       <div class="col-5">
          <div class="form-check form-check-inline" id="transactionComboBox">
-            <input class="form-check-input" type="radio" id="withdrawRadioBox" value="W" name="transactionType" onclick="myFunction()" checked />
+            <input class="form-check-input" type="radio" id="withdrawRadioBox" value="W" name="transactionType" onclick="myFunction()"  checked />
             <label class="form-check-label" for="withdrawRadioBox">Withdraw</label>
          </div>
          <div class="form-check form-check-inline">
@@ -58,22 +59,26 @@ function myFunction() {
          @foreach(var account in Model.Accounts) 
          {
          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" id="inlineCombobox" value=@account.AccountNumber name="accountNumber">
-            <label class="form-check-label" for="inlineCheckbox2">@account.AccountNumber</label>
+             <input class="form-check-input" type="radio" id="accountNumber" value=@account.AccountNumber name="accountNumber" />
+            <label class="form-check-label" for="accountNumber">@account.AccountNumber</label>
          </div>
          }
+         @* @Html.ValidationMessage("accountNumber", new { @class = "text-danger" }) *@
       </div>
    </div>
-   <div class="form-group row " id="destinationAccountInputTransfer">
+   <div class="form-group row " id="destinationAccountNumber">
       <label class="col-2">To Account:</label>
       <div class="col-5">
-         <input type="text" class="form-control" name="destinationAccountNumber">
+         <input type="text" class="form-control" name="destinationAccountNumber" id="destinationAccountNumber" data-val="true" data-val-required="Please select an account." />
+            @Html.ValidationMessage("destinationAccountNumber", new { @class = "text-danger" })
       </div>
    </div>
    <div class="form-group row ">
       <label class="col-2">Amount:</label>
       <div class="col-5">
-         <input type="text" class="form-control" name="amount">
+         <input type="text" class="form-control" name="amount" id="amount" data-val="true"
+                    data-val-required="The amount field is required." />
+         @Html.ValidationMessage("amount", new { @class = "text-danger" })
       </div>
    </div>
    <div class="form-group row ">

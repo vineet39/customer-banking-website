@@ -23,6 +23,14 @@ namespace BankingApplication.Controllers
             return View(customer);
         } 
 
+        public async Task<Account> ReturnAccountData(int accountNumber) 
+        {
+            var account = await _context.Account.Include(x => x.Transactions).
+                FirstOrDefaultAsync(x => x.AccountNumber == accountNumber);
+
+            return account;
+        }
+
         [HttpPost]
         public async Task<IActionResult> PerformTransaction(string transactionType,string accountNumber,string destinationAccountNumber,string amount,string comment = null){
             
@@ -37,7 +45,8 @@ namespace BankingApplication.Controllers
                     newView = await Deposit(int.Parse(accountNumber),decimal.Parse(amount));
                     break;
                 case "T":
-                    Transfer(int.Parse(accountNumber),int.Parse(destinationAccountNumber),decimal.Parse(amount),comment);
+                    newView = await Transfer(int.Parse(accountNumber),int.Parse(destinationAccountNumber),decimal.Parse(amount),comment);
+                    Console.WriteLine("Test");
                     break;
             }
 
@@ -46,8 +55,7 @@ namespace BankingApplication.Controllers
 
         public async Task<IActionResult> WithDraw(int accountNumber,decimal amount)
         {
-            var account = await _context.Account.Include(x => x.Transactions).
-                FirstOrDefaultAsync(x => x.AccountNumber == accountNumber);
+            var account = await ReturnAccountData(accountNumber);
 
             // if(amount <= 0)
             //     ModelState.AddModelError(nameof(amount), "Amount must be positive.");
@@ -67,8 +75,7 @@ namespace BankingApplication.Controllers
 
         public async Task<IActionResult> Deposit(int accountNumber,decimal amount){
             
-            var account = await _context.Account.Include(x => x.Transactions).
-                FirstOrDefaultAsync(x => x.AccountNumber == accountNumber);
+            var account = await ReturnAccountData(accountNumber);
 
             // if(amount <= 0)
             //     ModelState.AddModelError(nameof(amount), "Amount must be positive.");
@@ -88,9 +95,16 @@ namespace BankingApplication.Controllers
 
         }
 
-        public void Transfer(int accountNumber,int destinationAccountNumber, decimal amount,string comment)
-        {
+        public async Task<IActionResult> Transfer(int accountNumber,int destinationAccountNumber, decimal amount,string comment)
+        {   
+            var senderAccount = await ReturnAccountData(accountNumber);
+            var receiverAccount = await ReturnAccountData(destinationAccountNumber);
 
+            senderAccount.Transfer(amount,receiverAccount,comment);
+
+            await _context.SaveChangesAsync();
+            
+            return RedirectToAction ("Index", "Bank");
         }
 
     }
