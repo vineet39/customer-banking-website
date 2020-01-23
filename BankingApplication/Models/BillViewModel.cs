@@ -8,19 +8,10 @@ namespace BankingApplication.Models
 {
     public class BillViewModel
     {
-        public Customer Customer;
-        public BillPay Billpay;
+        public Customer Customer { get; set; }
+        public BillPay Billpay { get; set; }
 
         [Required]
-        public int selectedAccount;
-
-        public
-
-        [Required]
-        public decimal amount;
-
-        [Required]
-        [DataType(DataType.DateTime)]
-        public DateTime scheduledDate;
+        public int SelectedAccount { get; set; }
     }
 }

@@ -131,6 +131,18 @@ namespace BankingApplication.Data
                     ModifyDate = DateTime.ParseExact("19/12/2019 10:00:00 PM", format, null)
                 });
 
+            context.Payee.AddRange(
+                new Payee
+                {
+                    PayeeID = 1111,
+                    PayeeName = "RMIT",
+                    Address = "123 Fake Street",
+                    City = "Melbourne",
+                    State = "VIC",
+                    PostCode = "4444",
+                    Phone = "123456789"
+                });;
+
             context.SaveChanges();
         }
     }
