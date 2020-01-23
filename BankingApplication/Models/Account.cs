@@ -32,5 +32,7 @@ namespace BankingApplication.Models
 
 
         public List<Transaction> Transactions { get; set; } 
+
+        public List<BillPay> Bills { get; set; }
     }
 }

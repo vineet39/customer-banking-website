@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BankingApplication.Data;
+using BankingApplication.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,6 +33,7 @@ namespace BankingApplication
                 // Make the session cookie essential.
                 options.Cookie.IsEssential = true;
             });
+            services.AddHostedService<BillPayService>();
             services.AddControllersWithViews();
         }
 
