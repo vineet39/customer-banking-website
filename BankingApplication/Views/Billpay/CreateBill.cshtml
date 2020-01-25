@@ -1,27 +1,37 @@
 ﻿@model BillViewModel
 @{
     ViewData["Title"] = "BillPay";
-}
+    var radio = Model.Customer.Accounts[0].AccountNumber;
 
+}
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <form asp-action="BillPost" method="Post">
+            <form asp-action="CreateBill" method="Post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label for="From Account" class="control-label">From Account:</label>
                     @foreach (var account in Model.Customer.Accounts)
                     {
-                        @Html.RadioButtonFor(m => m.SelectedAccount, account.AccountNumber);
+                        if (account.AccountNumber == radio)
+                        {
+                        <label class="form-check-label"><input asp-for="SelectedAccount" value="@account.AccountNumber" type="radio" checked="" />@account.AccountNumber</label>
+                        }
+                        else
+                        {
+                        <label class="form-check-label"><input asp-for="SelectedAccount" value="@account.AccountNumber" type="radio" />@account.AccountNumber</label>
+                        }
+                        @Html.Raw(" ");
                     }
+                    <span asp-validation-for="SelectedAccount" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label for="To Payee" class="control-label">To Payee:</label>
-                    <input asp-for="Billpay.PayeeID" class="form-control" value="@Model.Billpay.PayeeID" />
-                    <span asp-validation-for="Billpay.PayeeID" class="text-danger"></span>
+                    @Html.DropDownListFor(m => m.SelectedPayee, new SelectList(Model.Payees, "Key", "Value"), new { @class = "form-control" })
+                    <span asp-validation-for="SelectedPayee" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label for="Amount" class="control-label">Amount:</label>
-                    <input id="Amount" name="Amount" class="form-control" value="@Model.Billpay.Amount" />
+                    <input asp-for="Billpay.Amount" class="form-control" value="@Model.Billpay.Amount" />
                     <span asp-validation-for="Billpay.Amount" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -31,11 +41,14 @@
                 </div>
                 <div class="form-group">
                     <label for="Peroid" class="control-label">Peroid:</label>
-                    <input asp-for="Billpay.Period" class="form-control" value="@Model.Billpay.Period" />
+                    <select asp-for="Billpay.Period"
+                            asp-items="Html.GetEnumSelectList<BillPay.Periods>()"
+                            class="form-control">
+                    </select>
                     <span asp-validation-for="Billpay.Period" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="CreateBill" class="btn btn-primary" />
+                    <input type="submit" value="Save" class="btn btn-primary" />
                 </div>
             </form>
             </div>

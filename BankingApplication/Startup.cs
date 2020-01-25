@@ -33,7 +33,8 @@ namespace BankingApplication
                 // Make the session cookie essential.
                 options.Cookie.IsEssential = true;
             });
-            services.AddHostedService<BillPayService>();
+            //Billpayservice for background checking bills
+            //services.AddHostedService<BillPayService>();
             services.AddControllersWithViews();
         }
 

@@ -1,11 +1,14 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BankingApplication.Models
 {
     public class Payee
     {
-        [StringLength(4)]
+
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int PayeeID { get; set; }
+
         
         [Required, StringLength(50)]
         public string PayeeName { get; set; }
