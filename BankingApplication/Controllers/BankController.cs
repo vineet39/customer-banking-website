@@ -23,7 +23,7 @@ namespace BankingApplication.Controllers
             return View(customer);
         } 
 
-        public async Task<Account> ReturnAccountData(int accountNumber) 
+        private async Task<Account> ReturnAccountData(int accountNumber) 
         {
             var account = await _context.Account.Include(x => x.Transactions).
                 FirstOrDefaultAsync(x => x.AccountNumber == accountNumber);

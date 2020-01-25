@@ -4,6 +4,7 @@ using BankingApplication.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace BankingApplication.Controllers
 {
@@ -12,9 +13,16 @@ namespace BankingApplication.Controllers
         private readonly BankAppContext _context;
         public CustomerController(BankAppContext context) => _context = context;
         private int CustomerID => HttpContext.Session.GetInt32(nameof(Customer.CustomerID)).Value;
-        public async Task<IActionResult> EditProfile(int customerid) {
+
+        private async Task<Customer> GetCustomerData() 
+        {
+            var customer = await _context.Customer.FindAsync(CustomerID);
+
+            return customer;
+        }
+        public async Task<IActionResult> EditProfile() {
             
-           var customer =  await _context.Customer.FirstOrDefaultAsync(x => x.CustomerID == CustomerID);
+           var customer =  await GetCustomerData();
 
             return View(customer);
         } 
@@ -22,7 +30,7 @@ namespace BankingApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveChanges(int customerid,string customerName,string TFN,string address,string city,string postcode,string state,string phone){
 
-            var customer = await _context.Customer.FindAsync(customerid);
+            var customer = await GetCustomerData();
             
             customer.CustomerName = customerName;
             customer.TFN = TFN;
@@ -37,5 +45,6 @@ namespace BankingApplication.Controllers
             return RedirectToAction(nameof(EditProfile));
             
         }
+
     }
 }
