@@ -17,7 +17,6 @@ namespace BankingApplication.Controllers
         public MyStatementsController(BankAppContext context) => _context = context;
         private int CustomerID => HttpContext.Session.GetInt32(nameof(Customer.CustomerID)).Value;
         private List<Transaction> transactions;
-        private int selectedAccountNumber;
         public async Task<IActionResult> SelectAccount() 
         {
             var accounts = await _context.Account.Where(x => x.CustomerID == CustomerID).ToListAsync();
