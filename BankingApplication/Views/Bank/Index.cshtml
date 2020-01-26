@@ -9,17 +9,17 @@
 
    <script type="text/javascript">
       function myFunction() {
-         var x = document.getElementById('destinationAccountNumber');
+         var destinationAccountNumber = document.getElementById('destinationAccountNumber');
+         var comment = document.getElementById('comment');
          var transferRadioBox = document.getElementById("transferRadioBox");
          var depositRadioBox = document.getElementById("depositRadioBox");
          var accountLabel = document.getElementById("accountLabel");
          if(transferRadioBox.checked)
          {
             accountLabel.innerHTML = "From Account";
-            if(x.style.display === "none")
-            {
-               x.style.display = "flex";
-            }
+            destinationAccountNumber.style.display = "flex";
+            comment.style.display = "flex";
+            
          }
          else 
          {
@@ -31,7 +31,10 @@
             {
                accountLabel.innerHTML = "From Account"
             }
-            x.style.display = "none";
+         
+         destinationAccountNumber.style.display = "none";
+         comment.style.display = "none";
+         
          }
       }
    </script>
@@ -65,8 +68,15 @@
          @foreach(var account in Model.Accounts) 
          {
          <div class="form-check form-check-inline">
-             <input class="form-check-input" type="radio" id="accountNumber" value=@account.AccountNumber name="accountNumber" checked/>
-            <label class="form-check-label" for="accountNumber">@account.AccountNumber</label>
+            @if(account.AccountNumber == Model.Accounts[0].AccountNumber)
+            {
+               <input class="form-check-input" type="radio" id="accountNumber" value=@account.AccountNumber name="accountNumber" checked/>
+            }
+            else
+            {
+               <input class="form-check-input" type="radio" id="accountNumber" value=@account.AccountNumber name="accountNumber"/>
+            }
+          <label class="form-check-label" for="accountNumber">@account.AccountNumber</label>
          </div>
          }
          @Html.ValidationMessage("accountNumber", new { @class = "text-danger" })
@@ -82,16 +92,15 @@
    <div class="form-group row ">
       <label class="col-2">Amount:</label>
       <div class="col-5">
-         
          <input type="text" class="form-control" name="amount" id="amount" data-val="true"
                     data-val-required="The amount field is required." />
          @Html.ValidationMessage("amount", new { @class = "text-danger" })
       </div>
    </div>
-   <div class="form-group row ">
+   <div class="form-group row " id="comment">
       <label class="col-2">Comment:</label>
       <div class="col-5">
-         <input type="text" class="form-control" name="comment">
+         <input type="text" class="form-control" name="commentInput" id="commentInput" />
       </div>
    </div>
    <div class="form-group-inline text-center mt-50">
