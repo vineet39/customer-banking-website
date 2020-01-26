@@ -1,4 +1,4 @@
-@model Customer
+@model IndexViewModel
 
 <head>
 <link rel="stylesheet" href="~/css/atmpage.css" />
@@ -41,7 +41,7 @@
 }
 
 <form asp-action="PerformTransaction" method="Post">
-   @* <div asp-validation-summary="All" class="text-danger"></div> *@
+   <div asp-validation-summary="ModelOnly" class="text-danger"></div>
    <div class="form-group row ">
       <label class="col-2">Transaction Details:</label>
    </div>
@@ -65,10 +65,10 @@
    <div class="form-group row">
       <label class="col-2" id="accountLabel">From Account:</label>
       <div class="col-5">
-         @foreach(var account in Model.Accounts) 
+         @foreach(var account in Model.Customer.Accounts) 
          {
          <div class="form-check form-check-inline">
-            @if(account.AccountNumber == Model.Accounts[0].AccountNumber)
+            @if(account.AccountNumber == Model.Customer.Accounts[0].AccountNumber)
             {
                <input class="form-check-input" type="radio" id="accountNumber" value=@account.AccountNumber name="accountNumber" checked/>
             }
@@ -85,22 +85,22 @@
    <div class="form-group row " id="destinationAccountNumber">
       <label class="col-2">To Account:</label>
       <div class="col-5">
-         <input type="text" class="form-control" name="destinationAccountNumberInput" id="destinationAccountNumberInput" data-val="true" data-val-required="Please select an account." />
-            @Html.ValidationMessage("destinationAccountNumberInput", new { @class = "text-danger" })
+         <input type="text" class="form-control" asp-for="DestinationAccountNumber"  value="" />
+         <span asp-validation-for="DestinationAccountNumber" class="text-danger"></span>
       </div>
    </div>
    <div class="form-group row ">
-      <label class="col-2">Amount:</label>
+      <label asp-for="Amount" class="col-2">Amount:</label>
       <div class="col-5">
-         <input type="text" class="form-control" name="amount" id="amount" data-val="true"
-                    data-val-required="The amount field is required." />
-         @Html.ValidationMessage("amount", new { @class = "text-danger" })
+         <input type="text" class="form-control" asp-for="Amount" value="" />
+         <span asp-validation-for="Amount" class="text-danger"></span>
       </div>
    </div>
-   <div class="form-group row " id="comment">
+    <div class="form-group row " id="comment">
       <label class="col-2">Comment:</label>
       <div class="col-5">
-         <input type="text" class="form-control" name="commentInput" id="commentInput" />
+         <input type="text" class="form-control" asp-for="Comment" />
+         <span asp-validation-for="Comment" class="text-danger"></span>
       </div>
    </div>
    <div class="form-group-inline text-center mt-50">
@@ -108,3 +108,4 @@
       <input type="submit" value="Execute" class="btn btn-primary" id="button" >
    </div>
 </form>
+

@@ -20,7 +20,10 @@ namespace BankingApplication.Controllers
             customer =  await _context.Customer.Include(x => x.Accounts).
                 FirstOrDefaultAsync(x => x.CustomerID == CustomerID);
 
-            return View(customer);
+            IndexViewModel indexViewModel = new IndexViewModel();
+            indexViewModel.Customer = customer;
+
+            return View(indexViewModel);
         } 
 
         private async Task<Account> ReturnAccountData(int accountNumber) 
