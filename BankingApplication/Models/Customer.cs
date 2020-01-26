@@ -14,6 +14,7 @@ namespace BankingApplication.Models
         public int CustomerID { get; set; }
 
         [Required, StringLength(50)]
+        [Display(Name = "Name")]
         public string CustomerName { get; set; }
 
         [StringLength(11)]

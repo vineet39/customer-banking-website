@@ -25,12 +25,18 @@ namespace BankingApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+            // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+            options.CheckConsentNeeded = context => false;
+            });
             services.AddDbContext<BankAppContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("BankAppContext")));
             services.AddSession(options =>
             {
                 // Make the session cookie essential.
                 options.Cookie.IsEssential = true;
+                options.IdleTimeout = TimeSpan.FromMinutes(15);
             });
             services.AddControllersWithViews();
         }
