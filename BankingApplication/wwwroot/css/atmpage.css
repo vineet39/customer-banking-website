@@ -8,6 +8,7 @@
     justify-content: center;
 }
 
-#destinationAccountInputTransfer{
+#destinationAccountNumber, #comment{
     display: none;
 }
+
