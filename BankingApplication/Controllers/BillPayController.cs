@@ -8,20 +8,23 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Repository;
 
 namespace BankingApplication.Controllers
 {
     public class BillPayController : Controller
     {
         private readonly BankAppContext _context;
+        private Wrapper repo;
         private int CustomerID => HttpContext.Session.GetInt32(nameof(Customer.CustomerID)).Value;
-        public BillPayController(BankAppContext context) => _context = context;
+        public BillPayController(BankAppContext context) {
+            _context = context;
+            repo = new Wrapper(context);
+        }
         public async Task<IActionResult> CreateBill()
         {
-            var list = _context.Payee.ToList();
-            Console.WriteLine(list[0].PayeeName);
-            var customer = await _context.Customer.Include(x => x.Accounts).
-                FirstOrDefaultAsync(x => x.CustomerID == CustomerID);
+            var list = repo.Payee.GetAll().ToList();
+            var customer = await repo.Customer.GetByID(x => x.CustomerID == CustomerID).Include(x => x.Accounts).FirstOrDefaultAsync();
             var billviewmodel = new BillViewModel { Customer = customer};
             billviewmodel.SetPayeeDictionary(list);
             return View(billviewmodel);
