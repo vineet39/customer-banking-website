@@ -32,7 +32,9 @@ namespace BankingApplication.Models
         [Required]
         [StringLength(8)]
         public DateTime ModifyDate { get; set; }
-        public List<Transaction> Transactions { get; set; } 
+        public List<Transaction> Transactions { get; set; }
+
+        public List<BillPay> Bills { get; set; }
 
          public void GenerateTransaction(char type, decimal amount, int destinationAccountNumber = 0, string comment = null)
          {

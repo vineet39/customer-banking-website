@@ -6,31 +6,40 @@ namespace BankingApplication.Models
 {
     public class BillPay
     {
-        [StringLength(4)]
         public int BillPayID { get; set; }
 
-        [Required,StringLength(4)]
-         [ForeignKey("FKAccountNumber")]
+        [Required]
+        [ForeignKey("FKAccountNumber")]
         public int AccountNumber { get; set; }
         public Account FKAccountNumber { get; set; }
 
-        [Required,StringLength(4)]
+        [Required]
         [ForeignKey("FKPayeeID")]
         public int PayeeID { get; set; }
         public Payee FKPayeeID { get; set; }
 
-        [Required,StringLength(8)]
+        [Required]
         [Column(TypeName = "money")]
         [DataType(DataType.Currency)]
         public decimal Amount { get; set; }
 
-        [Required,StringLength(15)]
+        [Required]
+        [DataType(DataType.DateTime)]
         public DateTime ScheduleDate { get; set; }
 
-        [Required]
-        public char Period { get; set; }
+        public enum Periods
+        {
+            [Display(Name ="Once Off")]
+            OnceOff = 'S',
+            Monthly = 'M',
+            Quarterly = 'Q',
+            Annually = 'Y'
+        }
 
-        [Required,StringLength(8)]
+        [Required]
+        public Periods Period { get; set; }
+
+        [Required]
         public DateTime ModifyDate { get; set; }
         
     }

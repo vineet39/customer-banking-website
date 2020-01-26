@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingApplication.Migrations
 {
     [DbContext(typeof(BankAppContext))]
-    [Migration("20200120074731_SecondMigration")]
-    partial class SecondMigration
+    [Migration("20200125071157_Initial-Migration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -54,32 +54,26 @@ namespace BankingApplication.Migrations
                     b.Property<int>("BillPayID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasMaxLength(4)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AccountNumber")
-                        .HasColumnType("int")
-                        .HasMaxLength(4);
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("money")
-                        .HasMaxLength(8);
+                        .HasColumnType("money");
 
                     b.Property<DateTime>("ModifyDate")
-                        .HasColumnType("datetime2")
-                        .HasMaxLength(8);
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("PayeeID")
-                        .HasColumnType("int")
-                        .HasMaxLength(4);
+                        .HasColumnType("int");
 
                     b.Property<string>("Period")
                         .IsRequired()
-                        .HasColumnType("nvarchar(1)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ScheduleDate")
-                        .HasColumnType("datetime2")
-                        .HasMaxLength(15);
+                        .HasColumnType("datetime2");
 
                     b.HasKey("BillPayID");
 
@@ -160,10 +154,7 @@ namespace BankingApplication.Migrations
             modelBuilder.Entity("BankingApplication.Models.Payee", b =>
                 {
                     b.Property<int>("PayeeID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasMaxLength(4)
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(50)")
@@ -249,7 +240,7 @@ namespace BankingApplication.Migrations
             modelBuilder.Entity("BankingApplication.Models.BillPay", b =>
                 {
                     b.HasOne("BankingApplication.Models.Account", "FKAccountNumber")
-                        .WithMany()
+                        .WithMany("Bills")
                         .HasForeignKey("AccountNumber")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
