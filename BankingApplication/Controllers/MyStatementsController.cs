@@ -22,7 +22,6 @@ namespace BankingApplication.Controllers
         }
         private int CustomerID => HttpContext.Session.GetInt32(nameof(Customer.CustomerID)).Value;
         private List<Transaction> transactions;
-        private int selectedAccountNumber;
         public async Task<IActionResult> SelectAccount() 
         {
             var accounts = await repo.Account.GetByID(x => x.CustomerID == CustomerID).ToListAsync();
