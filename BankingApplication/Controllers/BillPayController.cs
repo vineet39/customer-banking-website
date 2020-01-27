@@ -43,8 +43,16 @@ namespace BankingApplication.Controllers
             return View(billviewmodel);
         }
 
-        public IActionResult BillSchedule()
+        public async Task<IActionResult> SelectAccount()
         {
+            var accounts = await repo.Account.GetByID(x => x.CustomerID == CustomerID).ToListAsync();
+
+            return View(accounts);
+        }
+
+        public async Task<IActionResult> BillSchedule(int accountnumber)
+        {
+
             return View();
         }
     }

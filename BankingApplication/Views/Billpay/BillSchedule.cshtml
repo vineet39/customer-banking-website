@@ -1,15 +1,15 @@
-﻿
+﻿@model Account
 @{
     Layout = null;
 }
 
-<!DOCTYPE html>
+<div>
+    <h3>Your Bills</h3>
+    <table class="table">
+        <tr>
+            <th>@Html.DisplayNameFor(x => x.Bills[0].PayeeID)</th>
+        </tr>
+    </table>
+</div>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>BillSchedule</title>
-</head>
-<body>
-</body>
-</html>
+
