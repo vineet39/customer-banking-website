@@ -66,16 +66,11 @@ namespace BankingApplication.Controllers
         {
             var account = await ReturnAccountData(accountNumber);
 
-
-            
-            await repo.SaveChanges();
-
             bool transactionSuccessful = account.Withdraw(amount);
             
             if(!transactionSuccessful)
                 ModelState.AddModelError("TransactionFailed", "Insufficient balance.Transaction Failed");
 
-            
             await repo.SaveChanges();
                     
         }
@@ -94,8 +89,20 @@ namespace BankingApplication.Controllers
 
         public async Task Transfer(int accountNumber,int destinationAccountNumber, decimal amount,string comment)
         {   
+            if(accountNumber == destinationAccountNumber )
+            {
+                ModelState.AddModelError("TransactionFailed", "Sender and receiver account number can't be same.Transaction Failed.");
+                return;
+            }
+
             var senderAccount = await ReturnAccountData(accountNumber);
             var receiverAccount = await ReturnAccountData(destinationAccountNumber);
+            
+            if(receiverAccount == null)
+            {
+                ModelState.AddModelError("TransactionFailed", "Invalid receiver account number.Transaction Failed.");
+                return;
+            }
 
             bool transactionSuccessful = senderAccount.Transfer(amount,receiverAccount,comment);
             

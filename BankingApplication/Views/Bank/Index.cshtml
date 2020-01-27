@@ -12,9 +12,6 @@
          
          var error = document.getElementById('error');
          error.innerHTML = "";
-
-         @* var validation = document.getElementById('validation');
-         validation.innerHTML = ""; *@
          
          var destinationAccountNumber = document.getElementById('destinationAccountNumber');
          var comment = document.getElementById('comment');
@@ -106,7 +103,7 @@
     <div class="form-group row " id="comment">
       <label class="col-2">Comment:</label>
       <div class="col-5">
-         <input type="text" class="form-control" asp-for="Comment" />
+         <input type="text" class="form-control" asp-for="Comment" value="" />
          <span id="validation" asp-validation-for="Comment" class="text-danger"></span>
       </div>
    </div>
