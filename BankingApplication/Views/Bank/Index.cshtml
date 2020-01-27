@@ -9,6 +9,13 @@
 
    <script type="text/javascript">
       function myFunction() {
+         
+         var error = document.getElementById('error');
+         error.innerHTML = "";
+
+         @* var validation = document.getElementById('validation');
+         validation.innerHTML = ""; *@
+         
          var destinationAccountNumber = document.getElementById('destinationAccountNumber');
          var comment = document.getElementById('comment');
          var transferRadioBox = document.getElementById("transferRadioBox");
@@ -86,25 +93,28 @@
       <label class="col-2">To Account:</label>
       <div class="col-5">
          <input type="text" class="form-control" asp-for="DestinationAccountNumber"  value="" />
-         <span asp-validation-for="DestinationAccountNumber" class="text-danger"></span>
+         <span id="validation" asp-validation-for="DestinationAccountNumber" class="text-danger"></span>
       </div>
    </div>
    <div class="form-group row ">
       <label asp-for="Amount" class="col-2">Amount:</label>
       <div class="col-5">
          <input type="text" class="form-control" asp-for="Amount" value="" />
-         <span asp-validation-for="Amount" class="text-danger"></span>
+         <span id="validation" asp-validation-for="Amount" class="text-danger"></span>
       </div>
    </div>
     <div class="form-group row " id="comment">
       <label class="col-2">Comment:</label>
       <div class="col-5">
          <input type="text" class="form-control" asp-for="Comment" />
-         <span asp-validation-for="Comment" class="text-danger"></span>
+         <span id="validation" asp-validation-for="Comment" class="text-danger"></span>
       </div>
    </div>
+   <div class="form-group row " id="error">
+   @Html.ValidationMessage("TransactionFailed", new { @class = "text-danger" })
+   </div>
    <div class="form-group-inline text-center mt-50">
-      <button type="button" class="btn btn-secondary" id="button" >Cancel</button>
+      <button type="button" class="btn btn-secondary" id="button" style="margin-right:20px" onclick="location.href='@Url.Action("Index", "Home")'">Cancel</button>
       <input type="submit" value="Execute" class="btn btn-primary" id="button" >
    </div>
 </form>

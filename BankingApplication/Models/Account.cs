@@ -11,6 +11,8 @@ namespace BankingApplication.Models
     {
         public const decimal WithdrawServiceCharge = 0.1M;
         public const decimal TransferServiceCharge = 0.2M;
+        private const decimal minBalSavings = 0;
+        private const decimal minBalCheckings = 200;
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         [StringLength(4)]
@@ -58,11 +60,42 @@ namespace BankingApplication.Models
             this.Transactions.Add(transaction);
         }
 
-        public void Withdraw(decimal amount)
+        public bool checkIfFundsSufficient(decimal amount, decimal transactionCharge)
         {
-            Balance = Balance - amount;
-            
             var filteredList =  Transactions.Where(t => t.TransactionType != Transaction.ServiceChargeTransaction);
+
+            if(filteredList.Count() >= 5)
+            {
+               if((Balance - amount - transactionCharge  < minBalSavings && AccountType == 'S') 
+                    || (Balance - amount - transactionCharge < minBalCheckings && AccountType == 'C'))
+                {
+                    return false;
+                } 
+            }
+            else
+            {
+                if((Balance - amount  < minBalSavings && AccountType == 'S') 
+                    || (Balance - amount  < minBalCheckings && AccountType == 'C'))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public bool Withdraw(decimal amount)
+        {
+            bool haveSufficientFunds = checkIfFundsSufficient(amount, WithdrawServiceCharge);
+
+            if(!haveSufficientFunds)
+            {
+                return false;
+            }
+
+            var filteredList =  Transactions.Where(t => t.TransactionType != Transaction.ServiceChargeTransaction);
+            
+            Balance = Balance - amount;
             
             if(filteredList.Count() >= 5)
             {
@@ -71,6 +104,8 @@ namespace BankingApplication.Models
             }
             
             GenerateTransaction(Transaction.WithdrawTransaction,amount);
+
+            return true;
         }
 
         public void Deposit(decimal amount)
@@ -80,11 +115,18 @@ namespace BankingApplication.Models
             GenerateTransaction(Transaction.DepositTransaction,amount);
         }
 
-        public void Transfer(decimal amount,Account receiverAccount,string comment = null)
+        public bool Transfer(decimal amount,Account receiverAccount,string comment = null)
         {
-            Balance = Balance - amount;
-            
+            bool haveSufficientFunds = checkIfFundsSufficient(amount, TransferServiceCharge);
+
+            if(!haveSufficientFunds)
+            {
+                return false;
+            }
+
             var filteredList =  Transactions.Where(t => t.TransactionType != Transaction.ServiceChargeTransaction);
+
+            Balance = Balance - amount;
             
             if(filteredList.Count() >= 5)
             {
@@ -96,6 +138,8 @@ namespace BankingApplication.Models
 
             receiverAccount.Balance = receiverAccount.Balance + amount;
             GenerateTransaction(Transaction.TransferTransaction,amount,0,comment);
+
+            return true;
         }
     }
 }
