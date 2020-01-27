@@ -6,19 +6,24 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System;
+using RepositoryWrapper;
 
 namespace BankingApplication.Controllers
 {
     public class BankController : Controller
     {
-        private readonly BankAppContext _context;
-        public BankController(BankAppContext context) => _context = context;
+        //private readonly BankAppContext _context;
+        private readonly Wrapper repo;
+        public BankController(BankAppContext context) 
+        {
+            repo = new Wrapper(context);
+        }
         private int CustomerID => HttpContext.Session.GetInt32(nameof(Customer.CustomerID)).Value;
         private Customer customer;
         public async Task<IActionResult> Index() 
         {
-            customer =  await _context.Customer.Include(x => x.Accounts).
-                FirstOrDefaultAsync(x => x.CustomerID == CustomerID);
+            customer =  await repo.Customer.GetByID(x => x.CustomerID == CustomerID).Include(x => x.Accounts).
+                FirstOrDefaultAsync();
 
             IndexViewModel indexViewModel = new IndexViewModel();
             indexViewModel.Customer = customer;
@@ -28,8 +33,8 @@ namespace BankingApplication.Controllers
 
         private async Task<Account> ReturnAccountData(int accountNumber) 
         {
-            var account = await _context.Account.Include(x => x.Transactions).
-                FirstOrDefaultAsync(x => x.AccountNumber == accountNumber);
+            var account = await repo.Account.GetByID(x => x.AccountNumber == accountNumber).Include(x => x.Transactions).
+                FirstOrDefaultAsync();
 
             return account;
         }
@@ -61,12 +66,17 @@ namespace BankingApplication.Controllers
         {
             var account = await ReturnAccountData(accountNumber);
 
+
+            
+            await repo.SaveChanges();
+
             bool transactionSuccessful = account.Withdraw(amount);
             
             if(!transactionSuccessful)
                 ModelState.AddModelError("TransactionFailed", "Insufficient balance.Transaction Failed");
+
             
-            await _context.SaveChangesAsync();
+            await repo.SaveChanges();
                     
         }
 
@@ -75,8 +85,11 @@ namespace BankingApplication.Controllers
             var account = await ReturnAccountData(accountNumber);
 
             account.Deposit(amount);
-            await _context.SaveChangesAsync();
-        
+
+            await repo.SaveChanges();
+
+            return RedirectToAction ("Index", "Bank");               
+
         }
 
         public async Task Transfer(int accountNumber,int destinationAccountNumber, decimal amount,string comment)
@@ -91,7 +104,7 @@ namespace BankingApplication.Controllers
 
             senderAccount.Transfer(amount,receiverAccount,comment);
 
-            await _context.SaveChangesAsync();
+            await repo.SaveChanges();
             
         }
 

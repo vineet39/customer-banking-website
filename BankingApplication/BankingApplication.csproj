@@ -28,6 +28,12 @@
     <PackageReference Include="X.PagedList.Mvc.Core" Version="7.9.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Repository">
+      <HintPath>..\..\..\Repository\bin\Debug\netcoreapp3.1\Repository.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 
 
 </Project>
