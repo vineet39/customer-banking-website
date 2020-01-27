@@ -12,7 +12,8 @@ namespace BankingApplication.Models
         public decimal Amount { get; set; }
 
         [Required(ErrorMessage = "The destination account number is required")]
-        [Range(0, 9999, ErrorMessage = "Please enter a valid account number")]
+        [RegularExpression("[1-9]\\d{0}[0-9]\\d{2}",
+        ErrorMessage = "Enter a valid 4 digit account number.")]
         public int DestinationAccountNumber { get; set; }
 
         [StringLength(255)]
