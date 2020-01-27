@@ -20,7 +20,10 @@ namespace BankingApplication.Controllers
             customer =  await _context.Customer.Include(x => x.Accounts).
                 FirstOrDefaultAsync(x => x.CustomerID == CustomerID);
 
-            return View(customer);
+            IndexViewModel indexViewModel = new IndexViewModel();
+            indexViewModel.Customer = customer;
+
+            return View(indexViewModel);
         } 
 
         private async Task<Account> ReturnAccountData(int accountNumber) 
@@ -34,77 +37,62 @@ namespace BankingApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> PerformTransaction(string transactionType,string accountNumber,string destinationAccountNumber,string amount,string comment = null){
             
-            IActionResult newView = null;
-            
-            switch (transactionType) 
+             switch (transactionType) 
             {
                 case "W":
-                    newView = await WithDraw(int.Parse(accountNumber),decimal.Parse(amount));
+                    await WithDraw(int.Parse(accountNumber),decimal.Parse(amount));
                     break;
                 case "D":
-                    newView = await Deposit(int.Parse(accountNumber),decimal.Parse(amount));
+                    await Deposit(int.Parse(accountNumber),decimal.Parse(amount));
                     break;
                 case "T":
-                    newView = await Transfer(int.Parse(accountNumber),int.Parse(destinationAccountNumber),decimal.Parse(amount),comment);
+                    await Transfer(int.Parse(accountNumber),int.Parse(destinationAccountNumber),decimal.Parse(amount),comment);
                     Console.WriteLine("Test");
                     break;
             }
+            
+            customer =  await _context.Customer.Include(x => x.Accounts).
+                FirstOrDefaultAsync(x => x.CustomerID == CustomerID);
+            return View("Index",new IndexViewModel { Customer = customer });
 
-            return newView;
         }
 
-        public async Task<IActionResult> WithDraw(int accountNumber,decimal amount)
+        public async Task WithDraw(int accountNumber,decimal amount)
         {
             var account = await ReturnAccountData(accountNumber);
 
-            // if(amount <= 0)
-            //     ModelState.AddModelError(nameof(amount), "Amount must be positive.");
-            // if(amount.HasMoreThanTwoDecimalPlaces())
-            //     ModelState.AddModelError(nameof(amount), "Amount cannot have more than 2 decimal places.");
-            // if(!ModelState.IsValid)
-            // {
-            //     ViewBag.Amount = amount;
-            //     return View(account);
-            // }
-
-            account.Withdraw(amount);
-            await _context.SaveChangesAsync();
+            bool transactionSuccessful = account.Withdraw(amount);
             
-            return RedirectToAction ("Index", "Bank");           
+            if(!transactionSuccessful)
+                ModelState.AddModelError("TransactionFailed", "Insufficient balance.Transaction Failed");
+            
+            await _context.SaveChangesAsync();
+                    
         }
 
-        public async Task<IActionResult> Deposit(int accountNumber,decimal amount){
+        public async Task Deposit(int accountNumber,decimal amount){
             
             var account = await ReturnAccountData(accountNumber);
 
-            // if(amount <= 0)
-            //     ModelState.AddModelError(nameof(amount), "Amount must be positive.");
-            // if(amount.HasMoreThanTwoDecimalPlaces())
-            //     ModelState.AddModelError(nameof(amount), "Amount cannot have more than 2 decimal places.");
-            // if(!ModelState.IsValid)
-            // {
-            //     ViewBag.Amount = amount;
-            //     return View(account);
-            // }
-
             account.Deposit(amount);
             await _context.SaveChangesAsync();
-
-            return RedirectToAction ("Index", "Bank");           
-            
-
+        
         }
 
-        public async Task<IActionResult> Transfer(int accountNumber,int destinationAccountNumber, decimal amount,string comment)
+        public async Task Transfer(int accountNumber,int destinationAccountNumber, decimal amount,string comment)
         {   
             var senderAccount = await ReturnAccountData(accountNumber);
             var receiverAccount = await ReturnAccountData(destinationAccountNumber);
+
+            bool transactionSuccessful = senderAccount.Transfer(amount,receiverAccount,comment);
+            
+            if(!transactionSuccessful)
+                ModelState.AddModelError("TransactionFailed", "Insufficient balance.Transaction Failed");
 
             senderAccount.Transfer(amount,receiverAccount,comment);
 
             await _context.SaveChangesAsync();
             
-            return RedirectToAction ("Index", "Bank");
         }
 
     }
