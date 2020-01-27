@@ -11,7 +11,6 @@ namespace BankingApplication.Controllers
 {
     public class CustomerController : Controller
     {
-        private readonly BankAppContext _context;
         private readonly Wrapper repo;
         public CustomerController(BankAppContext context)
         {

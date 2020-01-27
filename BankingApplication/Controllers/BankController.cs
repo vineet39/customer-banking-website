@@ -56,8 +56,8 @@ namespace BankingApplication.Controllers
                     break;
             }
             
-            customer =  await _context.Customer.Include(x => x.Accounts).
-                FirstOrDefaultAsync(x => x.CustomerID == CustomerID);
+            customer =  await repo.Customer.GetByID(x => x.CustomerID == CustomerID).Include(x => x.Accounts).
+                FirstOrDefaultAsync();
             return View("Index",new IndexViewModel { Customer = customer });
 
         }
@@ -80,7 +80,7 @@ namespace BankingApplication.Controllers
                     
         }
 
-        public async Task Deposit(int accountNumber,decimal amount){
+        public async Task<RedirectToActionResult> Deposit(int accountNumber,decimal amount){
             
             var account = await ReturnAccountData(accountNumber);
 
