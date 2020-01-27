@@ -7,16 +7,18 @@ using BankingApplication.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using RepositoryWrapper;
 using SimpleHashing;
 
 namespace BankingApplication.Controllers
 {
     public class LoginController : Controller
     {
-        private readonly BankAppContext context;
-        public LoginController(BankAppContext Context)
+        //private readonly BankAppContext context;
+        private readonly Wrapper repo;
+        public LoginController(BankAppContext context)
         {
-            context = Context;
+            repo = new Wrapper(context);
         }
         public IActionResult Login()
         {
@@ -26,10 +28,10 @@ namespace BankingApplication.Controllers
         //Login Form post logic referencing Web Dev Tutorial 7
 
         [HttpPost]
-        public IActionResult Login(string userID, string password)
+        public async Task<IActionResult> Login(string userID, string password)
         {
             //LINQ query for eager loading login
-            var login = context.Login.Include(a => a.Customer).FirstOrDefault(a => a.UserID == userID);
+            var login = await repo.Login.GetByID(a => a.UserID == userID).Include(a => a.Customer).FirstOrDefaultAsync();
             if (login == null || !PBKDF2.Verify(login.Password, password))
             {
                 ModelState.AddModelError("LoginFailed", "Login failed, please try again.");

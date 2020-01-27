@@ -5,18 +5,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using RepositoryWrapper;
 
 namespace BankingApplication.Controllers
 {
     public class CustomerController : Controller
     {
         private readonly BankAppContext _context;
-        public CustomerController(BankAppContext context) => _context = context;
+        private readonly Wrapper repo;
+        public CustomerController(BankAppContext context)
+        {
+            repo = new Wrapper(context);
+        }
         private int CustomerID => HttpContext.Session.GetInt32(nameof(Customer.CustomerID)).Value;
 
         private async Task<Customer> GetCustomerData() 
         {
-            var customer = await _context.Customer.FindAsync(CustomerID);
+            var customer = await repo.Customer.GetByID(x => x.CustomerID == CustomerID).Include(x => x.Accounts).
+                FirstOrDefaultAsync();
 
             return customer;
         }
@@ -40,7 +46,7 @@ namespace BankingApplication.Controllers
             customer.PostCode = postcode;
             customer.Phone = phone;
             
-            await _context.SaveChangesAsync();
+            await repo.SaveChanges();
     
             return RedirectToAction(nameof(EditProfile));
             

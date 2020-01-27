@@ -8,19 +8,24 @@ using System.Linq;
 using X.PagedList;
 using System.Collections.Generic;
 using System;
+using RepositoryWrapper;
 
 namespace BankingApplication.Controllers
 {
     public class MyStatementsController : Controller
     {
-        private readonly BankAppContext _context;
-        public MyStatementsController(BankAppContext context) => _context = context;
+        //private readonly BankAppContext _context;
+        private readonly Wrapper repo;
+        public MyStatementsController(BankAppContext context)
+        {
+            repo = new Wrapper(context);
+        }
         private int CustomerID => HttpContext.Session.GetInt32(nameof(Customer.CustomerID)).Value;
         private List<Transaction> transactions;
         private int selectedAccountNumber;
         public async Task<IActionResult> SelectAccount() 
         {
-            var accounts = await _context.Account.Where(x => x.CustomerID == CustomerID).ToListAsync();
+            var accounts = await repo.Account.GetByID(x => x.CustomerID == CustomerID).ToListAsync();
 
             return View(accounts);
         } 
@@ -33,7 +38,7 @@ namespace BankingApplication.Controllers
 
             // return PartialView(transactions);
 
-            transactions = await _context.Transaction.Where(x => x.AccountNumber == accountNumber).ToListAsync();
+            transactions = await repo.Transaction.GetByID(x => x.AccountNumber == accountNumber).ToListAsync();
 
              HttpContext.Session.SetInt32("selectedAccountNumber", accountNumber);
 
@@ -45,14 +50,14 @@ namespace BankingApplication.Controllers
             const int pageSize = 4;
             var selectedAccountNumber = HttpContext.Session.GetInt32("selectedAccountNumber");
             Console.WriteLine(selectedAccountNumber);
-            var pagedList = await _context.Transaction.Where(x => x.AccountNumber == selectedAccountNumber).ToPagedListAsync(page, pageSize);
+            var pagedList = await repo.Transaction.GetByID(x => x.AccountNumber == selectedAccountNumber).ToPagedListAsync(page, pageSize);
 
             return View(pagedList);
         }
 
         public async Task<IActionResult> SeeMyBalance(int id) 
         {
-            var account = await _context.Account.FindAsync(id);
+            var account = await repo.Account.GetByID(x => x.AccountNumber == id).FirstOrDefaultAsync();
             return PartialView(account);
         } 
 

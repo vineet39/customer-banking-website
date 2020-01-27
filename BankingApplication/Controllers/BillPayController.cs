@@ -8,22 +8,20 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Repository;
+using RepositoryWrapper;
 
 namespace BankingApplication.Controllers
 {
     public class BillPayController : Controller
     {
-        private readonly BankAppContext _context;
-        private Wrapper repo;
+        private readonly Wrapper repo;
         private int CustomerID => HttpContext.Session.GetInt32(nameof(Customer.CustomerID)).Value;
         public BillPayController(BankAppContext context) {
-            _context = context;
             repo = new Wrapper(context);
         }
         public async Task<IActionResult> CreateBill()
         {
-            var list = repo.Payee.GetAll().ToList();
+            var list = await repo.Payee.GetAll().ToListAsync();
             var customer = await repo.Customer.GetByID(x => x.CustomerID == CustomerID).Include(x => x.Accounts).FirstOrDefaultAsync();
             var billviewmodel = new BillViewModel { Customer = customer};
             billviewmodel.SetPayeeDictionary(list);
@@ -33,17 +31,15 @@ namespace BankingApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateBill(BillViewModel bill)
         {
-            bill.Billpay.FKAccountNumber = await _context.Account
-                .FirstOrDefaultAsync(x => x.AccountNumber == bill.SelectedAccount);
-            bill.Billpay.FKPayeeID = await _context.Payee.FirstOrDefaultAsync(x => x.PayeeID == bill.SelectedPayee);
-            _context.BillPay.Update(bill.Billpay);
-            await _context.SaveChangesAsync();
-            var list = _context.Payee.ToList();
-            var customer = await _context.Customer.Include(x => x.Accounts).
-                FirstOrDefaultAsync(x => x.CustomerID == CustomerID);
+            bill.Billpay.FKAccountNumber = await repo.Account
+                .GetByID(x => x.AccountNumber == bill.SelectedAccount).FirstOrDefaultAsync();
+            bill.Billpay.FKPayeeID = await repo.Payee.GetByID(x => x.PayeeID == bill.SelectedPayee).FirstOrDefaultAsync();
+            repo.BillPay.Update(bill.Billpay);
+            await repo.SaveChanges();
+            var list = await repo.Payee.GetAll().ToListAsync();
+            var customer = await repo.Customer.GetByID(x => x.CustomerID == CustomerID).Include(x => x.Accounts).FirstOrDefaultAsync();
             var billviewmodel = new BillViewModel { Customer = customer };
             billviewmodel.SetPayeeDictionary(list);
-
             return View(billviewmodel);
         }
 

@@ -2,8 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace Repository
+namespace RepositoryWrapper
 {
     public class Wrapper
     {
@@ -97,9 +98,9 @@ namespace Repository
             }
         }
 
-        public void SaveChanges()
+        public async Task SaveChanges()
         {
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
 
