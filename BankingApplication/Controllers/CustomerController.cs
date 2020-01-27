@@ -77,6 +77,7 @@ namespace BankingApplication.Controllers
             if(newpassword != confirmnewpassword)
             {
                 ModelState.AddModelError("PasswordChangeFailed", "New password and confirmed new password do not match");
+                return View("ChangePassword");
             }
             
             login.Password = PBKDF2.Hash(newpassword);
