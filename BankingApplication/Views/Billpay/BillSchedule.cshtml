@@ -1,13 +1,16 @@
-﻿@model Account
+﻿@model BillScheduleViewModel
 @{
-    Layout = null;
+    ViewData["Title"] = "BillSchedule";
 }
 
 <div>
     <h3>Your Bills</h3>
+    @foreach (var bill in Model.bills)
+    {
+
+    }
     <table class="table">
         <tr>
-            <th>@Html.DisplayNameFor(x => x.Bills[0].PayeeID)</th>
         </tr>
     </table>
 </div>

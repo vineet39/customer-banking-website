@@ -50,10 +50,18 @@ namespace BankingApplication.Controllers
             return View(accounts);
         }
 
-        public async Task<IActionResult> BillSchedule(int accountnumber)
+        public async Task<IActionResult> BillSchedule(int id)
         {
+            var account = await repo.Account.GetByID(x => x.AccountNumber == id).Include(x => x.Bills).FirstOrDefaultAsync();
+            return View(account);
+        }
 
-            return View();
+        public async Task<IActionResult> SeeMyBalance(int id)
+        {
+            
+            var account = await repo.Account.GetByID(x => x.AccountNumber == id).FirstOrDefaultAsync();
+            return PartialView(account);
+            
         }
     }
 }
