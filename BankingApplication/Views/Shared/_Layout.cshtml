@@ -54,7 +54,13 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Bank" asp-action="Index">ATM Page</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="EditProfile">Edit Profile</a>
+                                <div class="btn-group">
+                                <a class="nav-link text-dark dropdown-toggle" data-toggle="dropdown">Edit Profile</a>
+                                <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-area="" asp-controller="Customer" asp-action="EditProfile">Edit Personal Details</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Customer" asp-action="ChangePassword">Change Password</a>
+                                </div>
+                                </div>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="MyStatements" asp-action="SelectAccount">My Statements</a>

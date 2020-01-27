@@ -69,7 +69,12 @@ namespace BankingApplication.Controllers
             bool transactionSuccessful = account.Withdraw(amount);
             
             if(!transactionSuccessful)
+            {
                 ModelState.AddModelError("TransactionFailed", "Insufficient balance.Transaction Failed");
+                return;
+            }
+            
+            ModelState.AddModelError("TransactionSuccess", "Transaction Successful.");
 
             await repo.SaveChanges();
                     
@@ -78,8 +83,9 @@ namespace BankingApplication.Controllers
         public async Task<RedirectToActionResult> Deposit(int accountNumber,decimal amount){
             
             var account = await ReturnAccountData(accountNumber);
-
             account.Deposit(amount);
+            
+            ModelState.AddModelError("TransactionSuccess", "Transaction Successful.");
 
             await repo.SaveChanges();
 
@@ -107,7 +113,12 @@ namespace BankingApplication.Controllers
             bool transactionSuccessful = senderAccount.Transfer(amount,receiverAccount,comment);
             
             if(!transactionSuccessful)
+            {
                 ModelState.AddModelError("TransactionFailed", "Insufficient balance.Transaction Failed");
+                return;
+            }
+            
+            ModelState.AddModelError("TransactionSuccess", "Transaction Successful.");
 
             senderAccount.Transfer(amount,receiverAccount,comment);
 
