@@ -21,22 +21,41 @@ namespace BankingApplication.Controllers
         public BillPayController(BankAppContext context) {
             repo = new Wrapper(context);
         }
-        public async Task<IActionResult> CreateBill()
+        public async Task<IActionResult> CreateBill(int billID = 0)
         {
-            var list = await repo.Payee.GetAll().ToListAsync();
+            HttpContext.Session.SetInt32("Mod", 0);
+            ViewData["Mod"] = 0;
             var customer = await repo.Customer.GetByID(x => x.CustomerID == CustomerID).Include(x => x.Accounts).FirstOrDefaultAsync();
-            var billviewmodel = new BillViewModel { Customer = customer};
+            var billviewmodel = new BillViewModel { Customer = customer };
+            if (billID != 0)
+            {
+                var bill = await repo.BillPay.GetByID(x => x.BillPayID == billID).FirstOrDefaultAsync();
+                billviewmodel.Billpay = bill;
+                HttpContext.Session.SetInt32("Mod", billID);
+                ViewData["Mod"] = billID;
+            }
+            var list = await repo.Payee.GetAll().ToListAsync();
             billviewmodel.SetPayeeDictionary(list);
             return View(billviewmodel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateBill(BillViewModel bill)
+        public async Task<IActionResult> CreateBill(BillViewModel billv)
         {
-            bill.Billpay.FKAccountNumber = await repo.Account
-                .GetByID(x => x.AccountNumber == bill.SelectedAccount).FirstOrDefaultAsync();
-            bill.Billpay.FKPayeeID = await repo.Payee.GetByID(x => x.PayeeID == bill.SelectedPayee).FirstOrDefaultAsync();
-            repo.BillPay.Update(bill.Billpay);
+            var mod = HttpContext.Session.GetInt32("Mod");
+            billv.Billpay.FKAccountNumber = await repo.Account
+                .GetByID(x => x.AccountNumber == billv.SelectedAccount).FirstOrDefaultAsync();
+            billv.Billpay.FKPayeeID = await repo.Payee.GetByID(x => x.PayeeID == billv.SelectedPayee).FirstOrDefaultAsync();
+            if (mod != 0)
+            {
+                var bill = await repo.BillPay.GetByID(x => x.BillPayID == mod).FirstOrDefaultAsync();
+                bill.UpdateBill(billv.Billpay);
+                repo.BillPay.Update(bill);
+            }
+            else
+            {
+                repo.BillPay.Update(billv.Billpay);
+            }
             await repo.SaveChanges();
             var list = await repo.Payee.GetAll().ToListAsync();
             var customer = await repo.Customer.GetByID(x => x.CustomerID == CustomerID).Include(x => x.Accounts).FirstOrDefaultAsync();
@@ -45,9 +64,35 @@ namespace BankingApplication.Controllers
             return View(billviewmodel);
         }
 
-        public IActionResult BillSchedule()
+        public async Task<IActionResult> SelectAccount()
         {
-            return View();
+            var accounts = await repo.Account.GetByID(x => x.CustomerID == CustomerID).ToListAsync();
+
+            return View(accounts);
+        }
+
+        public async Task<IActionResult> BillSchedule(int accountNumber)
+        {
+            var account = await repo.Account.GetByID(x => x.AccountNumber == accountNumber).Include(x => x.Bills).FirstOrDefaultAsync();
+            var list = await repo.Payee.GetAll().ToListAsync();
+            BillScheduleViewModel bills = new BillScheduleViewModel(account, list);
+            return View(bills);
+        }
+
+        public async Task<IActionResult> SeeMyBalance(int id)
+        {
+            
+            var account = await repo.Account.GetByID(x => x.AccountNumber == id).FirstOrDefaultAsync();
+            return PartialView(account);
+            
+        }
+
+        public async Task<IActionResult> DeleteBill(int id)
+        {
+            var bill = await repo.BillPay.GetByID(x => x.BillPayID == id).FirstOrDefaultAsync();
+            repo.BillPay.Delete(bill);
+            await repo.SaveChanges();
+            return RedirectToAction("CreateBill", "BillPay");
         }
     }
 }
