@@ -1,7 +1,15 @@
 ﻿@model BillViewModel
 @{
+    int radio;
     ViewData["Title"] = "BillPay";
-    var radio = Model.Customer.Accounts[0].AccountNumber;
+    if (Model.Billpay.AccountNumber == 0)
+    {
+        radio = Model.Customer.Accounts[0].AccountNumber;
+    }
+    else
+    {
+        radio = Model.Billpay.AccountNumber;
+    }
 
 }
     <div class="row justify-content-center">

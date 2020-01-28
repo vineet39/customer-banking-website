@@ -19,11 +19,16 @@ namespace BankingApplication.Controllers
         public BillPayController(BankAppContext context) {
             repo = new Wrapper(context);
         }
-        public async Task<IActionResult> CreateBill()
+        public async Task<IActionResult> CreateBill(int ?billID = null)
         {
-            var list = await repo.Payee.GetAll().ToListAsync();
             var customer = await repo.Customer.GetByID(x => x.CustomerID == CustomerID).Include(x => x.Accounts).FirstOrDefaultAsync();
-            var billviewmodel = new BillViewModel { Customer = customer};
+            var billviewmodel = new BillViewModel { Customer = customer };
+            if (billID.HasValue)
+            {
+                var bill = await repo.BillPay.GetByID(x => x.BillPayID == billID).FirstOrDefaultAsync();
+                billviewmodel.Billpay = bill;
+            }
+            var list = await repo.Payee.GetAll().ToListAsync();
             billviewmodel.SetPayeeDictionary(list);
             return View(billviewmodel);
         }
@@ -50,10 +55,12 @@ namespace BankingApplication.Controllers
             return View(accounts);
         }
 
-        public async Task<IActionResult> BillSchedule(int id)
+        public async Task<IActionResult> BillSchedule(int accountNumber)
         {
-            var account = await repo.Account.GetByID(x => x.AccountNumber == id).Include(x => x.Bills).FirstOrDefaultAsync();
-            return View(account);
+            var account = await repo.Account.GetByID(x => x.AccountNumber == accountNumber).Include(x => x.Bills).FirstOrDefaultAsync();
+            var list = await repo.Payee.GetAll().ToListAsync();
+            BillScheduleViewModel bills = new BillScheduleViewModel(account, list);
+            return View(bills);
         }
 
         public async Task<IActionResult> SeeMyBalance(int id)

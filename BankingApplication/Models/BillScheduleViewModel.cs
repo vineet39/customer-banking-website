@@ -9,7 +9,7 @@ namespace BankingApplication.Models
     {
         public Account account;
         public List<Payee> payees;
-        public Dictionary<string, BillPay> bills;
+        public List<NameBill> bills;
 
         public BillScheduleViewModel(Account a, List<Payee> p)
         {
@@ -17,17 +17,14 @@ namespace BankingApplication.Models
                 (from bill in a.Bills
                  join payee in p
                  on bill.PayeeID equals payee.PayeeID
-                 select new { payee.PayeeName, bill })
-                 .ToDictionary(x => x.PayeeName, x => x.bill);
+                 select new NameBill { PayeeName = payee.PayeeName, Bill = bill })
+                 .ToList();
         }
 
-        public void Join(Account a, List<Payee> p)
+        public class NameBill
         {
-            bills =
-                (from bill in a.Bills
-                 join payee in p
-                 on bill.PayeeID equals payee.PayeeID
-                 select new { payee.PayeeName, bill }).ToDictionary(x => x.PayeeName, x => x.bill);
+            public string PayeeName { get; set; }
+            public BillPay Bill { get; set; }
         }
     }
 }
