@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using System.Linq;
 using System;
 using RepositoryWrapper;
+using BankingApplication.Attributes;
+
 
 namespace BankingApplication.Controllers
-{
+{   
+    [AuthorizeCustomer]
     public class BankController : Controller
     {
         //private readonly BankAppContext _context;

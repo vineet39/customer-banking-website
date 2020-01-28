@@ -4,12 +4,14 @@ using BankingApplication.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using RepositoryWrapper;
 using SimpleHashing;
+using BankingApplication.Attributes;
 
 namespace BankingApplication.Controllers
-{
+{   
+    
+    [AuthorizeCustomer]
     public class CustomerController : Controller
     {
         private readonly Wrapper repo;
