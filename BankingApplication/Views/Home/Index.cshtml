@@ -1,16 +1,16 @@
 ﻿@using Microsoft.AspNetCore.Http
+
 @{
-    ViewData["Title"] = "Home Page";
+ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome To NWBA Banking Application</h1>
-    @{
-        var isLoggedIn = Context.Session.GetInt32(nameof(Customer.CustomerID)).HasValue;
-     }
-    @if(!isLoggedIn) 
-    {
-    <h1 class="display-4">Please sign in</h1>
-    }
-    
+   <h1 class="display-4">Welcome To NWBA Banking Application</h1>
+   @{
+   var isLoggedIn = Context.Session.GetInt32(nameof(Customer.CustomerID)).HasValue;
+   }
+   @if(!isLoggedIn) 
+   {
+   <h1 class="display-4">Please sign in</h1>
+   }
 </div>

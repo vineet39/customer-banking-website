@@ -120,8 +120,6 @@ namespace BankingApplication.Controllers
             
             ModelState.AddModelError("TransactionSuccess", "Transaction Successful.");
 
-            senderAccount.Transfer(amount,receiverAccount,comment);
-
             await repo.SaveChanges();
             
         }

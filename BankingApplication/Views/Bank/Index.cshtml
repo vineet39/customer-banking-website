@@ -1,49 +1,48 @@
 @model IndexViewModel
 
 <head>
-<link rel="stylesheet" href="~/css/atmpage.css" />
+   <link rel="stylesheet" href="~/css/atmpage.css" />
 </head>
 
 @section Scripts {
-   @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+@{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
-   <script type="text/javascript">
-      function myFunction() {
+<script type="text/javascript">
+   function myFunction() {
+      
+      var error = document.getElementById('error');
+      error.innerHTML = "";
+      
+      var destinationAccountNumber = document.getElementById('destinationAccountNumber');
+      var comment = document.getElementById('comment');
+      var transferRadioBox = document.getElementById("transferRadioBox");
+      var depositRadioBox = document.getElementById("depositRadioBox");
+      var accountLabel = document.getElementById("accountLabel");
+      if(transferRadioBox.checked)
+      {
+         accountLabel.innerHTML = "From Account";
+         destinationAccountNumber.style.display = "flex";
+         comment.style.display = "flex";
          
-         var error = document.getElementById('error');
-         error.innerHTML = "";
-         
-         var destinationAccountNumber = document.getElementById('destinationAccountNumber');
-         var comment = document.getElementById('comment');
-         var transferRadioBox = document.getElementById("transferRadioBox");
-         var depositRadioBox = document.getElementById("depositRadioBox");
-         var accountLabel = document.getElementById("accountLabel");
-         if(transferRadioBox.checked)
-         {
-            accountLabel.innerHTML = "From Account";
-            destinationAccountNumber.style.display = "flex";
-            comment.style.display = "flex";
-            
-         }
-         else 
-         {
-            if(depositRadioBox.checked)
-            {
-               accountLabel.innerHTML = "To Account";
-            }
-            else
-            {
-               accountLabel.innerHTML = "From Account"
-            }
-         
-         destinationAccountNumber.style.display = "none";
-         comment.style.display = "none";
-         
-         }
       }
-   </script>
+      else 
+      {
+         if(depositRadioBox.checked)
+         {
+            accountLabel.innerHTML = "To Account";
+         }
+         else
+         {
+            accountLabel.innerHTML = "From Account"
+         }
+      
+      destinationAccountNumber.style.display = "none";
+      comment.style.display = "none";
+      
+      }
+   }
+</script>
 }
-
 <form asp-action="PerformTransaction" method="Post">
    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
    <div class="form-group row ">
@@ -74,13 +73,13 @@
          <div class="form-check form-check-inline">
             @if(account.AccountNumber == Model.Customer.Accounts[0].AccountNumber)
             {
-               <input class="form-check-input" type="radio" id="accountNumber" value=@account.AccountNumber name="accountNumber" checked/>
+            <input class="form-check-input" type="radio" id="accountNumber" value=@account.AccountNumber name="accountNumber" checked/>
             }
             else
             {
-               <input class="form-check-input" type="radio" id="accountNumber" value=@account.AccountNumber name="accountNumber"/>
+            <input class="form-check-input" type="radio" id="accountNumber" value=@account.AccountNumber name="accountNumber"/>
             }
-          <label class="form-check-label" for="accountNumber">@account.AccountNumber</label>
+            <label class="form-check-label" for="accountNumber">@account.AccountNumber</label>
          </div>
          }
          @Html.ValidationMessage("accountNumber", new { @class = "text-danger" })
@@ -100,7 +99,7 @@
          <span id="validation" asp-validation-for="Amount" class="text-danger"></span>
       </div>
    </div>
-    <div class="form-group row " id="comment">
+   <div class="form-group row " id="comment">
       <label class="col-2">Comment:</label>
       <div class="col-5">
          <input type="text" class="form-control" asp-for="Comment" value="" />
@@ -108,12 +107,11 @@
       </div>
    </div>
    <div class="form-group row " id="error">
-   @Html.ValidationMessage("TransactionFailed", new { @class = "text-danger" })
-   @Html.ValidationMessage("TransactionSuccess", new { @class = "text-success" })
+      @Html.ValidationMessage("TransactionFailed", new { @class = "text-danger" })
+      @Html.ValidationMessage("TransactionSuccess", new { @class = "text-success" })
    </div>
    <div class="form-group-inline text-center mt-50">
       <button type="button" class="btn btn-secondary" id="button" style="margin-right:20px" onclick="location.href='@Url.Action("Index", "Home")'">Cancel</button>
       <input type="submit" value="Execute" class="btn btn-primary" id="button" >
    </div>
 </form>
-

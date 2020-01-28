@@ -1,48 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BankingApplication.Models
 {
-    public class Customer
-    {
-        [StringLength(4)]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+    public class Customer {
+        [StringLength (4)]
+        [DatabaseGenerated (DatabaseGeneratedOption.None)]
         public int CustomerID { get; set; }
 
-        [Required, StringLength(50)]
-        [Display(Name = "Name")]
+        [Required, StringLength (50)]
+        [Display (Name = "Name")]
         public string CustomerName { get; set; }
 
-        [StringLength(11)]
-        [RegularExpression("[0-9]\\d{10}",
-        ErrorMessage = "Enter a 11 digit TFN.")]
+        [StringLength (11)]
+        [RegularExpression ("[0-9]\\d{10}",
+            ErrorMessage = "Enter a 11 digit TFN.")]
         public string TFN { get; set; }
 
-        [StringLength(50)]
+        [StringLength (50)]
         public string Address { get; set; }
 
-        [StringLength(40)]
-        [RegularExpression("^[A-Z][a-z]+$",
-        ErrorMessage = "Enter a valid city name.")]
+        [StringLength (40)]
+        [RegularExpression ("^[A-Z][a-z]+$",
+            ErrorMessage = "Enter a valid city name.")]
         public string City { get; set; }
 
-        [StringLength(20)]
-        [RegularExpression("[A-Z]{3}",
-        ErrorMessage = "Enter your state eg: VIC.")]
+        [StringLength (20)]
+        [RegularExpression ("[A-Z]{3}",
+            ErrorMessage = "Enter your state eg: VIC.")]
         public string State { get; set; }
 
-        [StringLength(10)]
-        [RegularExpression("[1-9]\\d{3}",
-        ErrorMessage = "Enter a valid 4 digit postcode.")]
+        [StringLength (10)]
+        [RegularExpression ("[1-9]\\d{3}",
+            ErrorMessage = "Enter a valid 4 digit postcode.")]
         public string PostCode { get; set; }
 
-        [Required,StringLength(15)]
-        [RegularExpression("^[(]61[)][\\s][-][\\s][1-9]\\d{7}$",
-        ErrorMessage = "Phone number should be formatted like (61) - XXXXXXXX")]
+        [Required, StringLength (15)]
+        [RegularExpression ("^[(]61[)][\\s][-][\\s][1-9]\\d{7}$",
+            ErrorMessage = "Phone number should be formatted like (61) - XXXXXXXX")]
         public string Phone { get; set; }
 
         public List<Account> Accounts { get; set; }
