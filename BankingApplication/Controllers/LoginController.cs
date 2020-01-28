@@ -38,11 +38,10 @@ namespace BankingApplication.Controllers
                 return View(new LoginViewModel { UserID = userID });
             }
 
-            
-
             // Set customer session variables
             HttpContext.Session.SetInt32(nameof(Customer.CustomerID), login.CustomerID);
             HttpContext.Session.SetString(nameof(Customer.CustomerName), login.Customer.CustomerName);
+            HttpContext.Session.SetString(nameof(BankingApplication.Models.Login.UserID), login.UserID);
 
             //Redirect to customer page
             return RedirectToAction("Index", "Bank");

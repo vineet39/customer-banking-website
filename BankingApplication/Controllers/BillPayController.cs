@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RepositoryWrapper;
+using BankingApplication.Attributes;
 
 namespace BankingApplication.Controllers
-{
+{ 
+    [AuthorizeCustomer]
     public class BillPayController : Controller
     {
         private readonly Wrapper repo;

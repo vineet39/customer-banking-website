@@ -9,9 +9,11 @@ using X.PagedList;
 using System.Collections.Generic;
 using System;
 using RepositoryWrapper;
+using BankingApplication.Attributes;
 
 namespace BankingApplication.Controllers
-{
+{   
+    [AuthorizeCustomer]
     public class MyStatementsController : Controller
     {
         //private readonly BankAppContext _context;
