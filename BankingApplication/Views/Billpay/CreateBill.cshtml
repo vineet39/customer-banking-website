@@ -1,6 +1,11 @@
 ﻿@model BillViewModel
 @{
-    int mod = (int)ViewData["Mod"];
+
+    int mod = 0;
+    if(ViewData["Mod"] != null)
+    {
+        mod = (int)ViewData["Mod"];
+    }
     int radio;
     ViewData["Title"] = "BillPay";
     if (Model.Billpay.AccountNumber == 0)
