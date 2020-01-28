@@ -41,6 +41,18 @@ namespace BankingApplication.Models
 
         [Required]
         public DateTime ModifyDate { get; set; }
+
+        public void UpdateBill(BillPay bill)
+        {
+            AccountNumber = bill.FKAccountNumber.AccountNumber;
+            FKAccountNumber = bill.FKAccountNumber;
+            PayeeID = bill.FKPayeeID.PayeeID;
+            FKPayeeID = bill.FKPayeeID;
+            Amount = bill.Amount;
+            ScheduleDate = bill.ScheduleDate;
+            Period = bill.Period;
+            ModifyDate = DateTime.UtcNow;
+        }
         
     }
 }
