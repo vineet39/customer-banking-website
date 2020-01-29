@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BankingApplication.Data;
+using BankingApplication.HostedServices;
 using BankingApplication.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,7 +41,7 @@ namespace BankingApplication
                 options.IdleTimeout = TimeSpan.FromMinutes(15);
             });
             //Billpayservice for background checking bills
-            //services.AddHostedService<BillPayService>();
+            services.AddHostedService<BillPayService>();
             services.AddControllersWithViews();
         }
 
