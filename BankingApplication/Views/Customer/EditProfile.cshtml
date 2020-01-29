@@ -42,10 +42,12 @@ ViewData["Customerid"] = @Model.CustomerID;
             <label for="Phone" class="control-label">Phone:</label>
             <input id="Phone" name="Phone" class="form-control" value=@Model.Phone asp-for="Phone"/>
             <span asp-validation-for="Phone" class="text-danger"></span>
-            @* @Html.ValidationMessage("EditSuccess", new { @class = "text-success" }) *@
          </div>
-         <div class="form-group-inline text-center">
-            <button type="button" class="btn btn-secondary" id="button" style="margin-right:20px" onclick="location.href='@Url.Action("Index", "Home")'">Cancel</button>
+         <div class="text-center">
+            @Html.ValidationMessage("EditSuccess", new { @class = "text-success" })
+         </div>
+         <div class="form-group-inline text-center" style="margin-top:30px">
+            <button type="button" class="btn btn-secondary" id="button" style="margin-right:50px" onclick="location.href='@Url.Action("Index", "Home")'">Cancel</button>
             <input type="submit" value="Save" class="btn btn-primary" id="button" >
          </div>
       </form>

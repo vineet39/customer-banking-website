@@ -40,7 +40,6 @@ namespace BankingApplication.Controllers
             return View();
         } 
         
-        [HttpPost]
         public async Task<IActionResult> SaveChanges(int customerid,string customerName,string TFN,string address,string city,string postcode,string state,string phone){
 
             var customer = await GetCustomerData();
@@ -55,9 +54,10 @@ namespace BankingApplication.Controllers
             
             ModelState.AddModelError("EditSuccess", "Profile edited successfully.");
             await repo.SaveChanges();
+
+            HttpContext.Session.SetString(nameof(Customer.CustomerName), customerName);
     
-            return RedirectToAction(nameof(EditProfile));
-            
+            return View("EditProfile",customer);          
         }
 
         public async Task<IActionResult> SavePassword(string oldpassword,string newpassword,string confirmnewpassword){
