@@ -121,5 +121,18 @@ namespace BankingApplication.Models {
 
             return true;
         }
+
+        public bool PayBill(BillPay bill)
+        {
+            if(!checkIfFundsSufficient(bill.Amount, 0))
+            {
+                return false;
+            }
+
+            Balance -= bill.Amount;
+            GenerateTransaction(Transaction.BillPayTransaction, bill.Amount, 0);
+            return true;
+
+        }
     }
 }

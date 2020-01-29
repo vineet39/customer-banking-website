@@ -1,3 +1,4 @@
+using BankingApplication.Attributes;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -19,11 +20,13 @@ namespace BankingApplication.Models {
         [Required]
         [Column (TypeName = "money")]
         [DataType (DataType.Currency)]
+        [Range(1, double.MaxValue, ErrorMessage = "Please enter a valid amount")]
         public decimal Amount { get; set; }
 
         [Required]
-        [DataType (DataType.DateTime)]
-        public DateTime ScheduleDate { get; set; }
+        [ValidDate(ErrorMessage = "Date must be greater than or equal to today")]
+        [DataType(DataType.DateTime)]
+        public DateTime ScheduleDate { get; set; } = DateTime.UtcNow;
 
         public enum Periods {
             [Display (Name = "Once Off")]
