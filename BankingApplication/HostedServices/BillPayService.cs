@@ -55,7 +55,7 @@ namespace BankingApplication.HostedServices {
                 bills = await repo.BillPay.GetByID(x => x.ScheduleDate < DateTime.UtcNow).ToListAsync();
                 foreach (var bill in bills)
                 {
-                    var account = repo.Account.GetByID(x => x.AccountNumber == bill.AccountNumber).FirstOrDefault();
+                    var account = await repo.Account.GetByID(x => x.AccountNumber == bill.AccountNumber).Include(x => x.Transactions).FirstOrDefaultAsync();
                     account.PayBill(bill);
                     if(bill.Period == BillPay.Periods.OnceOff)
                     {
