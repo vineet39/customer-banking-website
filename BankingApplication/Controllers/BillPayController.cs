@@ -42,6 +42,14 @@ namespace BankingApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateBill(BillViewModel billv)
         {
+            var customer = await repo.Customer.GetByID(x => x.CustomerID == CustomerID).Include(x => x.Accounts).FirstOrDefaultAsync();
+            var list = await repo.Payee.GetAll().ToListAsync();
+            billv.Customer = customer;
+            billv.SetPayeeDictionary(list);
+            if (!ModelState.IsValid)
+            {
+                return View(billv);
+            }
             var mod = HttpContext.Session.GetInt32("Mod");
             billv.Billpay.FKAccountNumber = await repo.Account
                 .GetByID(x => x.AccountNumber == billv.SelectedAccount).FirstOrDefaultAsync();
@@ -57,8 +65,6 @@ namespace BankingApplication.Controllers
                 repo.BillPay.Update(billv.Billpay);
             }
             await repo.SaveChanges();
-            var list = await repo.Payee.GetAll().ToListAsync();
-            var customer = await repo.Customer.GetByID(x => x.CustomerID == CustomerID).Include(x => x.Accounts).FirstOrDefaultAsync();
             var billviewmodel = new BillViewModel { Customer = customer };
             billviewmodel.SetPayeeDictionary(list);
             return View(billviewmodel);
