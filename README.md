@@ -13,7 +13,8 @@ This project was made in ASP.net core in Visual Studio while being hosted on a M
 It is composed of a base project hosting a MVC setup and a seperate class library containing a generic repository pattern.
 In order to run this project the solution must be opened in Visual Studio and the project needs to reference the dll included in this github repository.
 
-Code references:
+Code references: 
+
 Paging and some controller examples taken and modified from RMIT Web Development Technologies tutorials
 
 Background Task implementation learnt from Microsoft Docs:
