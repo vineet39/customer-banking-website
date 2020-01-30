@@ -60,11 +60,9 @@ namespace BankingApplication.Controllers
                 bill.UpdateBill(billv.Billpay);
                 repo.BillPay.Update(bill);
             }
-            else
-            {
-                repo.BillPay.Update(billv.Billpay);
-            }
+            else { repo.BillPay.Update(billv.Billpay);}
             await repo.SaveChanges();
+            ModelState.AddModelError("BillCreatedSuccess", "Bill has been saved.");
             var billviewmodel = new BillViewModel { Customer = customer };
             billviewmodel.SetPayeeDictionary(list);
             return View(billviewmodel);

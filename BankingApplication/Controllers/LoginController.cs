@@ -14,7 +14,6 @@ namespace BankingApplication.Controllers
 {
     public class LoginController : Controller
     {
-        //private readonly BankAppContext context;
         private readonly Wrapper repo;
         public LoginController(BankAppContext context)
         {

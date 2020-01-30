@@ -36,7 +36,6 @@ namespace BankingApplication.Controllers
         } 
 
         public ViewResult ChangePassword() {
-
             return View();
         } 
         
