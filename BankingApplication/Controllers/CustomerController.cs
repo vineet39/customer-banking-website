@@ -27,6 +27,8 @@ namespace BankingApplication.Controllers
 
             return customer;
         }
+
+        // Go to edit profile page.
         public async Task<IActionResult> EditProfile() {
             
            var customer =  await GetCustomerData();
@@ -34,10 +36,13 @@ namespace BankingApplication.Controllers
             return View(customer);
         } 
 
+        // Go to change password page.
         public ViewResult ChangePassword() {
             return View();
         } 
         
+
+        // Editing all customer attributes except password.
         [HttpPost]
         public async Task<IActionResult> EditProfile(Customer customer){
             if (ModelState.IsValid)
@@ -45,11 +50,15 @@ namespace BankingApplication.Controllers
                 repo.Customer.Update(customer);
                 await repo.SaveChanges();
                 ModelState.AddModelError("EditSuccess", "Profile edited successfully.");
+                // Updating session variable storing customer name.
                 HttpContext.Session.SetString(nameof(Customer.CustomerName), customer.CustomerName);
             }
             return View(customer);
+
         }
 
+
+        // Editing customer's password.
         public async Task<IActionResult> SavePassword(string oldpassword,string newpassword,string confirmnewpassword){
             var userID = HttpContext.Session.GetString(nameof(Login.UserID));
             var login = await repo.Login.GetByID(a => a.UserID == userID).FirstOrDefaultAsync();

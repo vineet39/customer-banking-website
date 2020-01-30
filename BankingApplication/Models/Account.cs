@@ -51,6 +51,8 @@ namespace BankingApplication.Models {
             this.Transactions.Add (transaction);
         }
 
+        // Check if after withdrawing min balance of 0 remains in savings and 200 in checkings.
+        // Withdrawal amount includes service charges for withdraw and transfer.
         public bool checkIfFundsSufficient (decimal amount, decimal transactionCharge) {
             var filteredList = Transactions.Where (t => t.TransactionType != Transaction.ServiceChargeTransaction);
 
@@ -72,14 +74,17 @@ namespace BankingApplication.Models {
         public bool Withdraw (decimal amount) {
             bool haveSufficientFunds = checkIfFundsSufficient (amount, WithdrawServiceCharge);
 
+            // Abort if funds are less.
             if (!haveSufficientFunds) {
                 return false;
             }
 
+            // Filtered list of transactions excluding service charges.
             var filteredList = Transactions.Where (t => t.TransactionType != Transaction.ServiceChargeTransaction);
 
             Balance -= amount;
 
+            // If number of transactions greater than 5, charge user.
             if (filteredList.Count () >= 5) {
                 Balance -= WithdrawServiceCharge;
                 GenerateTransaction (Transaction.ServiceChargeTransaction, WithdrawServiceCharge);
@@ -98,23 +103,30 @@ namespace BankingApplication.Models {
 
         public bool Transfer (decimal amount, Account receiverAccount, string comment = null) {
             bool haveSufficientFunds = checkIfFundsSufficient (amount, TransferServiceCharge);
-
+            
+            // Abort if funds are less.
             if (!haveSufficientFunds) {
                 return false;
             }
-
+            // If number of transactions greater than 5, charge user.
             var filteredList = Transactions.Where (t => t.TransactionType != Transaction.ServiceChargeTransaction);
 
+            // Updating sender account balance.
             Balance -= amount;
-
+           
+            // If number of transactions greater than 5, charge user.
             if (filteredList.Count () >= 5) {
                 Balance -= TransferServiceCharge;
                 GenerateTransaction (Transaction.ServiceChargeTransaction, TransferServiceCharge);
             }
 
+            // Generate a trasanction indicating money withdrawed from sender account.
             GenerateTransaction (Transaction.TransferTransaction, amount, receiverAccount.AccountNumber, comment);
 
+            // Updating receiver account balance.
             receiverAccount.Balance = receiverAccount.Balance + amount;
+
+            // Generate a transaction indicating money deposited into receiver account.
             receiverAccount.GenerateTransaction (Transaction.TransferTransaction, amount, 0, comment);
 
             return true;
