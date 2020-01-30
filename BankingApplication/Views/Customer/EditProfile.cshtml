@@ -47,8 +47,8 @@ ViewData["Customerid"] = @Model.CustomerID;
             @Html.ValidationMessage("EditSuccess", new { @class = "text-success" })
          </div>
          <div class="form-group-inline text-center" style="margin-top:30px">
-            <button type="button" class="btn btn-secondary" id="button" style="margin-right:50px" onclick="location.href='@Url.Action("Index", "Home")'">Cancel</button>
-            <input type="submit" value="Save" class="btn btn-primary" id="button" >
+             <input type="submit" value="Save" class="btn btn-primary" id="button">
+             <button type="button" class="btn btn-secondary" id="button" style="margin-right:50px" onclick="location.href='@Url.Action("Index", "Home")'">Cancel</button>
          </div>
       </form>
    </div>

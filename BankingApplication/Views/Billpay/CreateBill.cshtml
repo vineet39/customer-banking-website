@@ -62,7 +62,7 @@
                 <span asp-validation-for="Billpay.Period" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" style="margin-right:50px" />
                 <button class="btn btn-secondary" onclick="location.href='@Url.Action("Index", "Home")';return false;">Cancel</button>
             </div>
             @Html.ValidationMessage("BillCreatedSuccess", new { @class = "text-success" })
