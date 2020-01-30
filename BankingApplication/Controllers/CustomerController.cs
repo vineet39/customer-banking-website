@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using RepositoryWrapper;
-using SimpleHashing;
 using BankingApplication.Attributes;
 
 namespace BankingApplication.Controllers

@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BankingApplication.Data;
 using BankingApplication.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RepositoryWrapper;
 using BankingApplication.Attributes;
 
 namespace BankingApplication.Controllers
-{ 
+{
     [AuthorizeCustomer]
     public class BillPayController : Controller
     {

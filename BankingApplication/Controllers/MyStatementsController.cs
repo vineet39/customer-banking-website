@@ -4,7 +4,6 @@ using BankingApplication.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using X.PagedList;
 using System.Collections.Generic;
 using System;

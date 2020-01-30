@@ -24,7 +24,7 @@
             <tr>
                 <td><button class="btn btn-primary" onclick="location.href='@Url.Action("CreateBill", "BillPay")?billID=@NameBill.Bill.BillPayID'">Modify</button></td>
                 <td>@NameBill.PayeeName</td>
-                <td>@NameBill.Bill.Amount</td>
+                <td>@NameBill.Bill.Amount.ToString("0.00")</td>
                 <td>@NameBill.Bill.ScheduleDate</td>
                 <td>@NameBill.Bill.Period</td>
             </tr>
