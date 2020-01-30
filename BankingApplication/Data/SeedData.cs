@@ -141,7 +141,37 @@ namespace BankingApplication.Data
                     State = "VIC",
                     PostCode = "4444",
                     Phone = "123456789"
-                });;
+                },
+                new Payee
+                {
+                    PayeeID = 2222,
+                    PayeeName = "PayeeINC",
+                    Address = "124 Fake Street",
+                    City = "Sometown",
+                    State = "VIC",
+                    PostCode = "5555",
+                    Phone = "123456788"
+                },
+                new Payee
+                {
+                    PayeeID = 3333,
+                    PayeeName = "BankCorp",
+                    Address = "142 Fake Street",
+                    City = "Melbourne",
+                    State = "VIC",
+                    PostCode = "5554",
+                    Phone = "123436788"
+                },
+                new Payee
+                {
+                    PayeeID = 4444,
+                    PayeeName = "Telstra",
+                    Address = "165 Fake Street",
+                    City = "Melbourne",
+                    State = "VIC",
+                    PostCode = "5654",
+                    Phone = "123436788"
+                });
 
             context.SaveChanges();
         }

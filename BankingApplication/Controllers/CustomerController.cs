@@ -41,7 +41,6 @@ namespace BankingApplication.Controllers
         
         [HttpPost]
         public async Task<IActionResult> EditProfile(Customer customer){
-
             if (ModelState.IsValid)
             {
                 repo.Customer.Update(customer);
@@ -53,33 +52,12 @@ namespace BankingApplication.Controllers
         }
 
         public async Task<IActionResult> SavePassword(string oldpassword,string newpassword,string confirmnewpassword){
-           
             var userID = HttpContext.Session.GetString(nameof(Login.UserID));
             var login = await repo.Login.GetByID(a => a.UserID == userID).FirstOrDefaultAsync();
-           
-            if (!PBKDF2.Verify(login.Password ,oldpassword))
-            {
-                ModelState.AddModelError("PasswordChangeFailed", "Old password entered is incorrect.");
-                return View("ChangePassword");
-            }
-            if(oldpassword == newpassword)
-            {
-                ModelState.AddModelError("PasswordChangeFailed", "Old password and new password cannot be same.");
-                return View("ChangePassword");
-            }
-
-            if(newpassword != confirmnewpassword)
-            {
-                ModelState.AddModelError("PasswordChangeFailed", "New password and confirmed new password do not match");
-                return View("ChangePassword");
-            }
-            
-            login.Password = PBKDF2.Hash(newpassword);
-            ModelState.AddModelError("PasswordChangeSuccess", "Password changed successfully.");
+            var result = login.ChangePassword(oldpassword, newpassword, confirmnewpassword);
+            ModelState.AddModelError(result.Item1, result.Item2);
             await repo.SaveChanges();
-
             return View("ChangePassword"); 
-
         }
 
     }
