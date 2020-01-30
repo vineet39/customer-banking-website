@@ -42,7 +42,7 @@ namespace BankingApplication.Models {
         [Required]
         public DateTime ModifyDate { get; set; }
 
-
+        //Method for updating bills from a billpayviewmodel object
         public void UpdateBill(BillPay bill)
         {
             AccountNumber = bill.FKAccountNumber.AccountNumber;

@@ -36,7 +36,8 @@ namespace BankingApplication.HostedServices {
 
             return Task.CompletedTask;
         }
-
+        //DbContext scoping learnt from StackOverflow user alsami:
+        //https://stackoverflow.com/questions/51572637/access-dbcontext-service-from-background-task
         private void DoWork (object state) {
 
            task = CheckBills();

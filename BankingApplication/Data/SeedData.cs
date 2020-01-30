@@ -10,6 +10,7 @@ namespace BankingApplication.Data
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
+            //Seed Data example referenced from Web Dev Tutorials
             using var context = new BankAppContext(serviceProvider.GetRequiredService<DbContextOptions<BankAppContext>>());
 
             // Look for customers.

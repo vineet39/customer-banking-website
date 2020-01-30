@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace BankingApplication.Models
 {
+    //ViewModel for presenting the BillSchedule page
     public class BillScheduleViewModel
     {
         public Account account;
         public List<Payee> payees;
         public List<NameBill> bills;
 
+        //LINQ for getting a list of bills matching payees.
+        //Made in order to obtain payee names
         public BillScheduleViewModel(Account a, List<Payee> p)
         {
             bills =
@@ -21,6 +22,7 @@ namespace BankingApplication.Models
                  .ToList();
         }
 
+        //Object for combining payees and matching bills
         public class NameBill
         {
             public string PayeeName { get; set; }

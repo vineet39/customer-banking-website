@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BankingApplication.Models
 {
+    //Viewmodel for presenting the bill create page
     public class BillViewModel {
         public Customer Customer { get; set; }
         public BillPay Billpay { get; set; } = new BillPay ();
@@ -19,6 +20,7 @@ namespace BankingApplication.Models
         [Display (Name = "Payee")]
         public Dictionary<int, string> Payees = new Dictionary<int, string> ();
 
+        //Dictionary for the payee dropdown
         public void SetPayeeDictionary (List<Payee> pList) {
             foreach (var payee in pList) {
                 Payees.Add (payee.PayeeID, payee.PayeeName);

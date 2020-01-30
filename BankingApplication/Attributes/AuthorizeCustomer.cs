@@ -6,6 +6,7 @@ using BankingApplication.Models;
 
 namespace BankingApplication.Attributes
 {
+    //Custom Attribute for blocking unlogged in users from Web Dev Tutorial
     public class AuthorizeCustomerAttribute : Attribute, IAuthorizationFilter
     {
         public void OnAuthorization(AuthorizationFilterContext context)

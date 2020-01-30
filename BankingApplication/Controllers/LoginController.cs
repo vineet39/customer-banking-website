@@ -11,6 +11,7 @@ namespace BankingApplication.Controllers
 {
     public class LoginController : Controller
     {
+        //Repository object
         private readonly Wrapper repo;
         public LoginController(BankAppContext context)
         {
@@ -21,8 +22,7 @@ namespace BankingApplication.Controllers
             return View();
         }
 
-        //Login Form post logic referencing Web Dev Tutorial 7
-
+        //Login Form post logic referencing Web Dev Tutorial
         [HttpPost]
         public async Task<IActionResult> Login(string userID, string password)
         {

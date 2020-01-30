@@ -14,7 +14,7 @@ namespace BankingApplication.Controllers
     [AuthorizeCustomer]
     public class BankController : Controller
     {
-        //private readonly BankAppContext _context;
+        //Repository object
         private readonly Wrapper repo;
         public BankController(BankAppContext context) 
         {
@@ -22,6 +22,7 @@ namespace BankingApplication.Controllers
         }
         private int CustomerID => HttpContext.Session.GetInt32(nameof(Customer.CustomerID)).Value;
         private Customer customer;
+
 
         // Method to go to atm page.
         public async Task<IActionResult> Index() 

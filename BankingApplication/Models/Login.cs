@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BankingApplication.Models {
+    //Login object contain business methods for changing passwords
     public class Login {
         [Key, DatabaseGenerated (DatabaseGeneratedOption.None), Required, StringLength (50)]
         public string UserID { get; set; }

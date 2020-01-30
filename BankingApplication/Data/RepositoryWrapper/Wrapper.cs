@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
+//Wrapper for utilizing generic repository
+//Uses objects created in RepoModels folder
 namespace RepositoryWrapper
 {
     public class Wrapper

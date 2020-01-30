@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace BankingApplication.Models {
+    //Account object contains business methods for atm transactions and paying bills
     public class Account {
         public const decimal WithdrawServiceCharge = 0.1M;
         public const decimal TransferServiceCharge = 0.2M;

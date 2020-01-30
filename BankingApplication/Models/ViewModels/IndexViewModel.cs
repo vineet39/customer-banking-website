@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace BankingApplication.Models {
+    //Viewmodel for presenting the atm page
     public class IndexViewModel {
         public Customer Customer { get; set; }
 

@@ -12,6 +12,7 @@ using RepositoryWrapper;
 namespace BankingApplication.Controllers {
     [AuthorizeCustomer]
     public class MyStatementsController : Controller {
+        //Repository object
         private readonly Wrapper repo;
         public MyStatementsController (BankAppContext context) {
             repo = new Wrapper (context);
