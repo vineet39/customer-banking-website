@@ -22,6 +22,8 @@ namespace BankingApplication.Controllers
         }
         private int CustomerID => HttpContext.Session.GetInt32(nameof(Customer.CustomerID)).Value;
         private Customer customer;
+
+        // Method to go to atm page.
         public async Task<IActionResult> Index() 
         {
             customer =  await repo.Customer.GetByID(x => x.CustomerID == CustomerID).Include(x => x.Accounts).
@@ -41,7 +43,7 @@ namespace BankingApplication.Controllers
             return account;
         }
 
-        [HttpPost]
+        // Redirecting to type of transaction based on user input,withdraw if 'W', deposit if 'D', tranfer if 'T'.
         public async Task<IActionResult> PerformTransaction(string transactionType,string accountNumber,string destinationAccountNumber,string amount,string comment = null){
             
              switch (transactionType) 
@@ -64,6 +66,7 @@ namespace BankingApplication.Controllers
 
         }
 
+        // Performing withdraw operation.
         public async Task WithDraw(int accountNumber,decimal amount)
         {
             var account = await ReturnAccountData(accountNumber);
@@ -82,6 +85,7 @@ namespace BankingApplication.Controllers
                     
         }
 
+        // Performing deposit operation.
         public async Task<RedirectToActionResult> Deposit(int accountNumber,decimal amount){
             
             var account = await ReturnAccountData(accountNumber);
@@ -95,8 +99,10 @@ namespace BankingApplication.Controllers
 
         }
 
+        // Performing transfer operation.
         public async Task Transfer(int accountNumber,int destinationAccountNumber, decimal amount,string comment)
         {   
+            // Returning from method if sender and receiver account number entered are the same.
             if(accountNumber == destinationAccountNumber )
             {
                 ModelState.AddModelError("TransactionFailed", "Sender and receiver account number can't be same.Transaction Failed.");
@@ -106,6 +112,7 @@ namespace BankingApplication.Controllers
             var senderAccount = await ReturnAccountData(accountNumber);
             var receiverAccount = await ReturnAccountData(destinationAccountNumber);
             
+            // Returning from method if incorrect receiver account number is entered.
             if(receiverAccount == null)
             {
                 ModelState.AddModelError("TransactionFailed", "Invalid receiver account number.Transaction Failed.");
