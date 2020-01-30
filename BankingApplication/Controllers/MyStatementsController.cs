@@ -29,6 +29,7 @@ namespace BankingApplication.Controllers {
             return RedirectToAction (nameof (MyDetails));
         }
 
+        // Paging code referenced from web dev tutorials.
         public async Task<IActionResult> MyDetails (int page = 1) {
             // Number of transactions to be shown at a time.
             const int pageSize = 4;
