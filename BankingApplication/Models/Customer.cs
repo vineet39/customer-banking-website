@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace BankingApplication.Models
 {
     public class Customer {
-        [StringLength (4)]
         [DatabaseGenerated (DatabaseGeneratedOption.None)]
         public int CustomerID { get; set; }
 

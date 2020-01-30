@@ -40,23 +40,16 @@ namespace BankingApplication.Controllers
         } 
         
         [HttpPost]
-        public async Task<IActionResult> SaveChanges(int customerid,string customerName,string TFN,string address,string city,string postcode,string state,string phone){
+        public async Task<IActionResult> EditProfile(Customer customer){
 
-            var customer = await GetCustomerData();
-            
-            customer.CustomerName = customerName;
-            customer.TFN = TFN;
-            customer.Address = address;
-            customer.City = city;
-            customer.State = state;
-            customer.PostCode = postcode;
-            customer.Phone = phone;
-            
-            ModelState.AddModelError("EditSuccess", "Profile edited successfully.");
-            await repo.SaveChanges();
-    
-            return RedirectToAction(nameof(EditProfile));
-            
+            if (ModelState.IsValid)
+            {
+                repo.Customer.Update(customer);
+                await repo.SaveChanges();
+                ModelState.AddModelError("EditSuccess", "Profile edited successfully.");
+                HttpContext.Session.SetString(nameof(Customer.CustomerName), customer.CustomerName);
+            }
+            return View(customer);
         }
 
         public async Task<IActionResult> SavePassword(string oldpassword,string newpassword,string confirmnewpassword){
