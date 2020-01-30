@@ -17,7 +17,6 @@ namespace BankingApplication.Controllers {
             repo = new Wrapper (context);
         }
         private int CustomerID => HttpContext.Session.GetInt32 (nameof (Customer.CustomerID)).Value;
-        private List<Transaction> transactions;
         public async Task<IActionResult> SelectAccount () {
             
             var accounts = await repo.Account.GetByID (x => x.CustomerID == CustomerID).ToListAsync ();
