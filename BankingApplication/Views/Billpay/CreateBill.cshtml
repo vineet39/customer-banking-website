@@ -61,7 +61,7 @@
                 </select>
                 <span asp-validation-for="Billpay.Period" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group text-center" style="margin-top:30px">
                 <input type="submit" value="Save" class="btn btn-primary" style="margin-right:50px" />
                 <button class="btn btn-secondary" onclick="location.href='@Url.Action("Index", "Home")';return false;">Cancel</button>
             </div>
@@ -70,8 +70,8 @@
         @if (mod > 0)
         {
             <div>
-            <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("SelectAccount", "BillPay")'">Back to Account Selection</button>
-            <button class="btn-danger" onclick="location.href='@Url.Action("DeleteBill", "BillPay")?id=@mod'">Cancel Bill</button>
+            <button type="button" class="btn btn-primary" style="margin-right:20px" onclick="location.href='@Url.Action("SelectAccount", "BillPay")'">Back to Account Selection</button>
+            <button class="btn btn-danger" onclick="location.href='@Url.Action("DeleteBill", "BillPay")?id=@mod'">Cancel Bill</button>
             </div>
         }
         </div>
