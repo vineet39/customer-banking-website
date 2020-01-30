@@ -47,6 +47,9 @@ namespace BankingApplication.HostedServices {
                 "CheckBills completed. Count: {Count}", count);
         }
 
+        //Timed method for checking if bills need to be paid.
+        //Looks up bills that have a scheduled date before the current time
+        //and pays them in the referenced account.
         private async Task CheckBills()
         {
             using (var scope = _scopedFactory.CreateScope())
