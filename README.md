@@ -3,7 +3,7 @@ Assignment 2 Web Development Technologies 2020 Flexible Semester
 
 Ryan Cassidy - s3740446
 
-Vineet Bugtani - S3734938
+Vineet Bugtani - s3734938
 
 Equal contribution by both assignment partners
 
@@ -12,7 +12,7 @@ Repository for the NWBA Online Banking Application Project.
 This project was made in ASP.net core in Visual Studio while being hosted on a Microsoft Sql Server.
 It is composed of a base project written in C# as MVC pattern and a seperate class library containing a generic repository pattern.
 This project utilizes EF core to manage and validate business model objects.
-In order to run this project the solution must be opened in Visual Studio and the project needs to reference the dll included in this github repository.
+In order to run this project the solution must be opened in Visual Studio and the project needs to reference the dll included in this github repository. RepositoryDLL contains both the DLL and the project solution for viewing the repository pattern.
 
 Code references: 
 
