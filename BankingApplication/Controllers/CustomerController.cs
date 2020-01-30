@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using RepositoryWrapper;
-using SimpleHashing;
 using BankingApplication.Attributes;
 
 namespace BankingApplication.Controllers
@@ -39,67 +38,34 @@ namespace BankingApplication.Controllers
 
         // Go to change password page.
         public ViewResult ChangePassword() {
-
             return View();
         } 
         
+
         // Editing all customer attributes except password.
-        public async Task<IActionResult> SaveChanges(int customerid,string customerName,string TFN,string address,string city,string postcode,string state,string phone){
+        [HttpPost]
+        public async Task<IActionResult> EditProfile(Customer customer){
+            if (ModelState.IsValid)
+            {
+                repo.Customer.Update(customer);
+                await repo.SaveChanges();
+                ModelState.AddModelError("EditSuccess", "Profile edited successfully.");
+                // Updating session variable storing customer name.
+                HttpContext.Session.SetString(nameof(Customer.CustomerName), customer.CustomerName);
+            }
+            return View(customer);
 
-            var customer = await GetCustomerData();
-            
-            customer.CustomerName = customerName;
-            customer.TFN = TFN;
-            customer.Address = address;
-            customer.City = city;
-            customer.State = state;
-            customer.PostCode = postcode;
-            customer.Phone = phone;
-            
-            ModelState.AddModelError("EditSuccess", "Profile edited successfully.");
-            await repo.SaveChanges();
-
-            // Updating session variable storing customer name.
-            HttpContext.Session.SetString(nameof(Customer.CustomerName), customerName);
-    
-            return View("EditProfile",customer);          
         }
+
 
         // Editing customer's password.
         public async Task<IActionResult> SavePassword(string oldpassword,string newpassword,string confirmnewpassword){
-           
             var userID = HttpContext.Session.GetString(nameof(Login.UserID));
             var login = await repo.Login.GetByID(a => a.UserID == userID).FirstOrDefaultAsync();
-
-             // Returning from method if old password entered is incorrect
-            if (!PBKDF2.Verify(login.Password ,oldpassword))
-            {
-                ModelState.AddModelError("PasswordChangeFailed", "Old password entered is incorrect.");
-                return View("ChangePassword");
-            }
-
-            // Returning from method if old password and new password are the same.
-            if(oldpassword == newpassword)
-            {
-                ModelState.AddModelError("PasswordChangeFailed", "Old password and new password cannot be same.");
-                return View("ChangePassword");
-            }
-            
-            // Returning from method if new password and confirmed new password do not match.
-            if(newpassword != confirmnewpassword)
-            {
-                ModelState.AddModelError("PasswordChangeFailed", "New password and confirmed new password do not match");
-                return View("ChangePassword");
-            }
-            
-            // Hashing the password
-            login.Password = PBKDF2.Hash(newpassword);
-            
-            ModelState.AddModelError("PasswordChangeSuccess", "Password changed successfully.");
+            var result = login.ChangePassword(oldpassword, newpassword, confirmnewpassword);
+            ModelState.AddModelError(result.Item1, result.Item2);
             await repo.SaveChanges();
-
             return View("ChangePassword"); 
-
         }
 
     }

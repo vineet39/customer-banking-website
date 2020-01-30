@@ -6,8 +6,9 @@ using BankingApplication.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using RepositoryWrapper;
 using X.PagedList;
+using System.Collections.Generic;
+using System;
 
 namespace BankingApplication.Controllers {
     [AuthorizeCustomer]

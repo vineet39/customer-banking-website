@@ -63,12 +63,16 @@
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
-                <button class="btn btn-primary" onclick="location.href='@Url.Action("Index", "Bank")';return false;">Cancel</button>
+                <button class="btn btn-secondary" onclick="location.href='@Url.Action("Index", "Home")';return false;">Cancel</button>
             </div>
+            @Html.ValidationMessage("BillCreatedSuccess", new { @class = "text-success" })
         </form>
         @if (mod > 0)
         {
+            <div>
+            <button type="button" class="btn btn-primary" onclick="location.href='@Url.Action("SelectAccount", "MyStatements")'">Back to Account Selection</button>
             <button class="btn-danger" onclick="location.href='@Url.Action("DeleteBill", "BillPay")?id=@mod'">Cancel Bill</button>
-         }
+            </div>
+        }
         </div>
     </div>

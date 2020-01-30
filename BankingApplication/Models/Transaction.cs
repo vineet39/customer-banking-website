@@ -12,7 +12,6 @@ namespace BankingApplication.Models
 
         public const char ServiceChargeTransaction = 'S';
 
-        [StringLength (4)]
         public int TransactionID { get; set; }
 
         [Required]
@@ -20,18 +19,15 @@ namespace BankingApplication.Models
         public char TransactionType { get; set; }
 
         [Required]
-        [StringLength (4)]
         [Display (Name = "Account Number")]
         public int AccountNumber { get; set; }
         public virtual Account Account { get; set; }
 
-        [StringLength (4)]
         [ForeignKey ("DestinationAccount")]
         [Display (Name = "Destination Account Number")]
         public int? DestinationAccountNumber { get; set; }
         public virtual Account DestinationAccount { get; set; }
 
-        [StringLength (8)]
         [Required]
         [Column (TypeName = "money")]
         [DataType (DataType.Currency)]

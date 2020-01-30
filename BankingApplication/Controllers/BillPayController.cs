@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BankingApplication.Data;
 using BankingApplication.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RepositoryWrapper;
 using BankingApplication.Attributes;
 
 namespace BankingApplication.Controllers
-{ 
+{
     [AuthorizeCustomer]
     public class BillPayController : Controller
     {
@@ -60,11 +56,9 @@ namespace BankingApplication.Controllers
                 bill.UpdateBill(billv.Billpay);
                 repo.BillPay.Update(bill);
             }
-            else
-            {
-                repo.BillPay.Update(billv.Billpay);
-            }
+            else { repo.BillPay.Update(billv.Billpay);}
             await repo.SaveChanges();
+            ModelState.AddModelError("BillCreatedSuccess", "Bill has been saved.");
             var billviewmodel = new BillViewModel { Customer = customer };
             billviewmodel.SetPayeeDictionary(list);
             return View(billviewmodel);

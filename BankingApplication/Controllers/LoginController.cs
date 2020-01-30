@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BankingApplication.Data;
 using BankingApplication.Models;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +11,6 @@ namespace BankingApplication.Controllers
 {
     public class LoginController : Controller
     {
-        //private readonly BankAppContext context;
         private readonly Wrapper repo;
         public LoginController(BankAppContext context)
         {

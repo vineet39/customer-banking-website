@@ -12,14 +12,12 @@ namespace BankingApplication.Models {
         private const decimal minBalCheckings = 200;
 
         [Key, DatabaseGenerated (DatabaseGeneratedOption.None)]
-        [StringLength (4)]
         public int AccountNumber { get; set; }
 
         [Required]
         public char AccountType { get; set; }
 
         [Required]
-        [StringLength (4)]
         public int CustomerID { get; set; }
         public virtual Customer Customer { get; set; }
 
@@ -84,7 +82,7 @@ namespace BankingApplication.Models {
             // Filtered list of transactions excluding service charges.
             var filteredList = Transactions.Where (t => t.TransactionType != Transaction.ServiceChargeTransaction);
 
-            Balance = Balance - amount;
+            Balance -= amount;
 
             // If number of transactions greater than 5, charge user.
             if (filteredList.Count () >= 5) {
@@ -98,7 +96,7 @@ namespace BankingApplication.Models {
         }
 
         public void Deposit (decimal amount) {
-            Balance = Balance + amount;
+            Balance += amount;
 
             GenerateTransaction (Transaction.DepositTransaction, amount);
         }
@@ -114,7 +112,7 @@ namespace BankingApplication.Models {
             var filteredList = Transactions.Where (t => t.TransactionType != Transaction.ServiceChargeTransaction);
 
             // Updating sender account balance.
-            Balance = Balance - amount;
+            Balance -= amount;
            
             // If number of transactions greater than 5, charge user.
             if (filteredList.Count () >= 5) {
